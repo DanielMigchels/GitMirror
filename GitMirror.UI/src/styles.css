@@ -8,9 +8,17 @@
   --color-background-darker: #171717;
   
   --color-text: #D3DAD9;
+
+  --color-information: #084887;
+  --color-information-dark: #053769;
+  
+  --color-warning: #FCAB10;
+  --color-warning-dark: #db950d;
 }
 
 html {
   @apply bg-background;
   @apply text-text;
 }
+
+--color-warning: #f5b607;

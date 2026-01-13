@@ -21,45 +21,52 @@
 
         <div
             [class]="'flex flex-col transition-all duration-300 overflow-hidden ' + (isMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 md:max-h-screen md:opacity-100')">
-            <a routerLink="/" routerLinkActive="text-primary" [routerLinkActiveOptions]="{exact: true}"
+            <a routerLink="/"
                 (click)="closeMenu()"
                 class="py-4 flex justify-start gap-3 p-6 cursor-pointer transition-colors hover:bg-background-darker">
-                <div class="text-2xl flex items-center justify-center">
+                <div class="text-2xl flex items-center justify-center" routerLinkActive="text-primary" [routerLinkActiveOptions]="{exact: true}">
                     <ng-icon name="heroRectangleGroup" class=""></ng-icon>
                 </div>
                 <div>Overview</div>
             </a>
-            <a routerLink="/mirrors" routerLinkActive="text-primary" (click)="closeMenu()"
+            <a routerLink="/repositories" (click)="closeMenu()"
                 class="py-4 flex justify-start gap-3 p-6 cursor-pointer transition-colors hover:bg-background-darker">
-                <div class="text-2xl flex items-center justify-center">
+                <div class="text-2xl flex items-center justify-center" routerLinkActive="text-primary" [routerLinkActiveOptions]="{exact: true}">
+                    <ng-icon name="heroFolderOpen" class=""></ng-icon>
+                </div>
+                <div>Repositories</div>
+            </a>
+            <a routerLink="/mirrors" (click)="closeMenu()"
+                class="py-4 flex justify-start gap-3 p-6 cursor-pointer transition-colors hover:bg-background-darker">
+                <div class="text-2xl flex items-center justify-center" routerLinkActive="text-primary" [routerLinkActiveOptions]="{exact: true}">
                     <ng-icon name="heroArrowPath" class=""></ng-icon>
                 </div>
                 <div>Mirrors</div>
             </a>
-            <a routerLink="/providers" routerLinkActive="text-primary" (click)="closeMenu()"
+            <a routerLink="/providers" (click)="closeMenu()"
                 class="py-4 flex justify-start gap-3 p-6 cursor-pointer transition-colors hover:bg-background-darker">
-                <div class="text-2xl flex items-center justify-center">
+                <div class="text-2xl flex items-center justify-center" routerLinkActive="text-primary" [routerLinkActiveOptions]="{exact: true}">
                     <ng-icon name="heroCircleStack" class=""></ng-icon>
                 </div>
                 <div>Providers</div>
             </a>
-            <a routerLink="/history" routerLinkActive="text-primary" (click)="closeMenu()"
+            <a routerLink="/history" (click)="closeMenu()"
                 class="py-4 flex justify-start gap-3 p-6 cursor-pointer transition-colors hover:bg-background-darker">
-                <div class="text-2xl flex items-center justify-center">
+                <div class="text-2xl flex items-center justify-center" routerLinkActive="text-primary" [routerLinkActiveOptions]="{exact: true}">
                     <ng-icon name="heroClipboardDocumentCheck" class=""></ng-icon>
                 </div>
                 <div>History</div>
             </a>
-            <a routerLink="/settings" routerLinkActive="text-primary" (click)="closeMenu()"
+            <a routerLink="/settings" (click)="closeMenu()"
                 class="py-4 flex justify-start gap-3 p-6 hover:bg-background-darker cursor-pointer transition-colors">
-                <div class="text-2xl flex items-center justify-center">
+                <div class="text-2xl flex items-center justify-center" routerLinkActive="text-primary" [routerLinkActiveOptions]="{exact: true}">
                     <ng-icon name="heroCog" class=""></ng-icon>
                 </div>
                 <div>Settings</div>
             </a>
         </div>
     </div>
-    <div class="">
+    <div class="flex-1 px-6 py-9 overflow-auto">
         <router-outlet></router-outlet>
     </div>
 </div>
