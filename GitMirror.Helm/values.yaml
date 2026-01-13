@@ -1,0 +1,10 @@
+namespace: gitmirror
+gitplatforms:
+  azuredevops:
+    baseurl: "https://your-organization.visualstudio.com/"
+    username: "username"
+    password: "placeholder"
+  gitlab:
+    baseurl: "https://gitlab.your-organization.com/"
+    username: "username"
+    password: "placeholder"

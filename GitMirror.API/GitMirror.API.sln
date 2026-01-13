@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36603.0 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitMirror.API", "GitMirror.API\GitMirror.API.csproj", "{A8DFA943-0D15-44A0-9593-230DDE2167A0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A8DFA943-0D15-44A0-9593-230DDE2167A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8DFA943-0D15-44A0-9593-230DDE2167A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8DFA943-0D15-44A0-9593-230DDE2167A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8DFA943-0D15-44A0-9593-230DDE2167A0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AA2742FB-14C9-4C16-A57C-03465B45E37B}
+	EndGlobalSection
+EndGlobal

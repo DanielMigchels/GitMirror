@@ -1,0 +1,20 @@
+services:
+  gitmirror:
+    build:
+      context: .
+      dockerfile: GitMirror.Docker/dockerfile
+    ports:
+      - 5000:5000
+    environment:
+      - GitPlatforms__AzureDevOps__BaseUrl=https://your-organization.visualstudio.com/
+      - GitPlatforms__AzureDevOps__Username=username
+      - GitPlatforms__AzureDevOps__Password=placeholder
+      - GitPlatforms__GitLab__BaseUrl=https://gitlab.your-organization.com/
+      - GitPlatforms__GitLab__Username=username
+      - GitPlatforms__GitLab__Password=placeholder
+    networks:
+      - gitmirror_network
+
+networks:
+  gitmirror_network:
+    driver: bridge

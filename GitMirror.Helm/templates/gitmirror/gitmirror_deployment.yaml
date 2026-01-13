@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitmirror-deployment
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gitmirror-deployment
+  template:
+    metadata:
+      labels:
+        app: gitmirror-deployment
+    spec:
+      containers:
+        - name: gitmirror-deployment
+          image: 'danielmigchels/gitmirror:latest'
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          envFrom:
+            - secretRef:
+                name: gitmirror-secret
