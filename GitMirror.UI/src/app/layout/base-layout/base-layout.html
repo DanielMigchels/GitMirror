@@ -1,0 +1,65 @@
+<div class="w-screen h-screen flex flex-col md:flex-row">
+    <div class="bg-background-dark shadow-xl flex flex-col md:gap-3">
+
+        <div class="flex flex-row justify-between items-center">
+            <div class="flex items-center justify-start gap-3 px-6 md:py-6">
+                <div class="w-12 shadow">
+                    <img src="logo.svg" alt="GitMirror Logo" />
+                </div>
+                <h1 class="font-semibold">GitMirror</h1>
+            </div>
+            <div class="p-6 md:hidden">
+                <button (click)="toggleMenu()" class="text-2xl cursor-pointer hover:text-primary transition-colors">
+                    @if (isMenuOpen) {
+                    <ng-icon name="heroXMark"></ng-icon>
+                    } @else {
+                    <ng-icon name="heroBars3"></ng-icon>
+                    }
+                </button>
+            </div>
+        </div>
+
+        <div
+            [class]="'flex flex-col transition-all duration-300 overflow-hidden ' + (isMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 md:max-h-screen md:opacity-100')">
+            <a routerLink="/" routerLinkActive="text-primary" [routerLinkActiveOptions]="{exact: true}"
+                (click)="closeMenu()"
+                class="py-4 flex justify-start gap-3 p-6 cursor-pointer transition-colors hover:bg-background-darker">
+                <div class="text-2xl flex items-center justify-center">
+                    <ng-icon name="heroRectangleGroup" class=""></ng-icon>
+                </div>
+                <div>Overview</div>
+            </a>
+            <a routerLink="/mirrors" routerLinkActive="text-primary" (click)="closeMenu()"
+                class="py-4 flex justify-start gap-3 p-6 cursor-pointer transition-colors hover:bg-background-darker">
+                <div class="text-2xl flex items-center justify-center">
+                    <ng-icon name="heroArrowPath" class=""></ng-icon>
+                </div>
+                <div>Mirrors</div>
+            </a>
+            <a routerLink="/providers" routerLinkActive="text-primary" (click)="closeMenu()"
+                class="py-4 flex justify-start gap-3 p-6 cursor-pointer transition-colors hover:bg-background-darker">
+                <div class="text-2xl flex items-center justify-center">
+                    <ng-icon name="heroCircleStack" class=""></ng-icon>
+                </div>
+                <div>Providers</div>
+            </a>
+            <a routerLink="/history" routerLinkActive="text-primary" (click)="closeMenu()"
+                class="py-4 flex justify-start gap-3 p-6 cursor-pointer transition-colors hover:bg-background-darker">
+                <div class="text-2xl flex items-center justify-center">
+                    <ng-icon name="heroClipboardDocumentCheck" class=""></ng-icon>
+                </div>
+                <div>History</div>
+            </a>
+            <a routerLink="/settings" routerLinkActive="text-primary" (click)="closeMenu()"
+                class="py-4 flex justify-start gap-3 p-6 hover:bg-background-darker cursor-pointer transition-colors">
+                <div class="text-2xl flex items-center justify-center">
+                    <ng-icon name="heroCog" class=""></ng-icon>
+                </div>
+                <div>Settings</div>
+            </a>
+        </div>
+    </div>
+    <div class="">
+        <router-outlet></router-outlet>
+    </div>
+</div>

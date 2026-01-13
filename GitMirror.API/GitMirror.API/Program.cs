@@ -18,6 +18,7 @@ using GitMirror.Services.RepositoryMirror;
 using Hangfire;
 using Hangfire.Dashboard.BasicAuthorization;
 using Serilog;
+using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,33 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 builder.Host.UseSerilog();
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+});
+
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddSpaStaticFiles(configuration =>
+{
+    configuration.RootPath = "wwwroot/";
+});
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "GitMirror.API", Version = "v1" });
+});
+
+builder.Services.AddHangfire(configuration =>
+{
+    configuration.UseSerilogLogProvider().UseSimpleAssemblyNameTypeSerializer().UseRecommendedSerializerSettings().UseInMemoryStorage();
+});
+
+builder.Services.AddHangfireServer(options =>
+{
+    options.WorkerCount = 1;
+});
 
 builder.Services.AddControllers();
 
@@ -48,7 +76,7 @@ builder.Services.AddHttpClient<IAzureDevOpsGateway, AzureDevOpsGateway>();
 
 builder.Services.AddTransient<IGitPlatformService, GitLabService>();
 builder.Services.AddTransient<IGitLabApiService, GitLabApiService>();
-builder.Services.AddTransient<IGitLabGateway, GitLabGateway>();
+builder.Services.AddHttpClient<IGitLabGateway, GitLabGateway>();
 
 builder.Services.AddTransient<IGitPlatformService, GitHubService>();
 builder.Services.AddTransient<IGitHubApiService, GitHubApiService>();
@@ -58,43 +86,59 @@ builder.Services.AddTransient<IGitPlatformService, BitbucketService>();
 builder.Services.AddTransient<IBitbucketApiService, BitbucketApiService>();
 builder.Services.AddHttpClient<IBitbucketGateway, BitbucketGateway>();
 
-builder.Services.AddHangfire(configuration =>
-{
-    configuration.UseSerilogLogProvider().UseSimpleAssemblyNameTypeSerializer().UseRecommendedSerializerSettings().UseInMemoryStorage();
-});
-
-builder.Services.AddHangfireServer(options =>
-{
-    options.WorkerCount = 1;
-});
-
 var app = builder.Build();
 
-app.UseAuthorization();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseRouting();
+
+app.UseSpaStaticFiles();
+
+app.UseSerilogRequestLogging();
+
+#pragma warning disable ASP0014 // Suggest using top level route registrations
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
+#pragma warning restore ASP0014 // Suggest using top level route registrations
+
 
 app.UseHangfireDashboard("/hangfire", new DashboardOptions
 {
-    Authorization = new[]
+    /*
+Authorization = new[]
+{
+    new BasicAuthAuthorizationFilter(new BasicAuthAuthorizationFilterOptions
     {
-        new BasicAuthAuthorizationFilter(new BasicAuthAuthorizationFilterOptions
-        {
-            RequireSsl = false,
-            SslRedirect = false,
-            LoginCaseSensitive = false,
-            Users =
-            [
-                new BasicAuthAuthorizationUser
-                {
-                    Login = "admin",
-                    PasswordClear = "admin"
-                }
-            ]
-        })
+        RequireSsl = false,
+        SslRedirect = false,
+        LoginCaseSensitive = false,
+        Users =
+        [
+            new BasicAuthAuthorizationUser
+            {
+                Login = "admin",
+                PasswordClear = "admin"
+            }
+        ]
+    })
+}
+    */
+});
+
+app.UseSpa(spa =>
+{
+    if (app.Environment.IsDevelopment())
+    {
+        spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
     }
 });
 
 RecurringJob.AddOrUpdate<IRepositoryMirrorService>("Execute Git Repository Mirror", x => x.Execute(), Cron.Daily(), new RecurringJobOptions());
-
-app.MapControllers();
 
 app.Run();
