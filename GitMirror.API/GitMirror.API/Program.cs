@@ -1,24 +1,25 @@
-using GitMirror.Options;
-using GitMirror.Services.Git;
-using GitMirror.Services.GitMirror;
-using GitMirror.Services.GitPlatforms;
-using GitMirror.Services.GitPlatforms.AzureDevOps;
-using GitMirror.Services.GitPlatforms.AzureDevOps.Api;
-using GitMirror.Services.GitPlatforms.AzureDevOps.Api.Gateway;
-using GitMirror.Services.GitPlatforms.GitLab;
-using GitMirror.Services.GitPlatforms.GitLab.Api;
-using GitMirror.Services.GitPlatforms.GitLab.Api.Gateway;
-using GitMirror.Services.GitPlatforms.GitHub;
-using GitMirror.Services.GitPlatforms.GitHub.Api;
-using GitMirror.Services.GitPlatforms.GitHub.Api.Gateway;
-using GitMirror.Services.GitPlatforms.Bitbucket;
-using GitMirror.Services.GitPlatforms.Bitbucket.Api;
-using GitMirror.Services.GitPlatforms.Bitbucket.Api.Gateway;
-using GitMirror.Services.RepositoryMirror;
+using GitMirror.API.Options;
+using GitMirror.API.Services.GitMirrorService;
+using GitMirror.API.Services.PlatformMirrorService;
+using GitMirror.API.Services.PlatformIntegrationsService;
+using GitMirror.API.Services.PlatformIntegrationsService.AzureDevOps;
+using GitMirror.API.Services.PlatformIntegrationsService.AzureDevOps.Api;
+using GitMirror.API.Services.PlatformIntegrationsService.AzureDevOps.Api.Gateway;
+using GitMirror.API.Services.PlatformIntegrationsService.GitLab;
+using GitMirror.API.Services.PlatformIntegrationsService.GitLab.Api;
+using GitMirror.API.Services.PlatformIntegrationsService.GitLab.Api.Gateway;
+using GitMirror.API.Services.PlatformIntegrationsService.GitHub;
+using GitMirror.API.Services.PlatformIntegrationsService.GitHub.Api;
+using GitMirror.API.Services.PlatformIntegrationsService.GitHub.Api.Gateway;
+using GitMirror.API.Services.PlatformIntegrationsService.Bitbucket;
+using GitMirror.API.Services.PlatformIntegrationsService.Bitbucket.Api;
+using GitMirror.API.Services.PlatformIntegrationsService.Bitbucket.Api.Gateway;
 using Hangfire;
-using Hangfire.Dashboard.BasicAuthorization;
 using Serilog;
 using Microsoft.OpenApi;
+using Serilog.Sinks.Network;
+using GitMirror.API.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +27,7 @@ Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .Enrich.FromLogContext()
     .WriteTo.Console()
-    // .WriteTo.TCPSink(builder.Configuration["Elastic:TcpSink"])
+    .WriteTo.TCPSink(builder.Configuration["Elastic:TcpSink"])
     .CreateLogger();
 
 builder.Host.UseSerilog();
@@ -37,6 +38,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 });
 
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddDbContext<DatabaseContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")));
 
 builder.Services.AddSpaStaticFiles(configuration =>
 {
@@ -60,29 +63,29 @@ builder.Services.AddHangfireServer(options =>
 
 builder.Services.AddControllers();
 
-builder.Services.Configure<GitPlatformSettings>("AzureDevOps", builder.Configuration.GetSection("GitPlatforms:AzureDevOps"));
-builder.Services.Configure<GitPlatformSettings>("GitLab", builder.Configuration.GetSection("GitPlatforms:GitLab"));
-builder.Services.Configure<GitPlatformSettings>("GitHub", builder.Configuration.GetSection("GitPlatforms:GitHub"));
-builder.Services.Configure<GitPlatformSettings>("Bitbucket", builder.Configuration.GetSection("GitPlatforms:Bitbucket"));
+builder.Services.Configure<PlatformSettings>("AzureDevOps", builder.Configuration.GetSection("Platforms:AzureDevOps"));
+builder.Services.Configure<PlatformSettings>("GitLab", builder.Configuration.GetSection("Platforms:GitLab"));
+builder.Services.Configure<PlatformSettings>("GitHub", builder.Configuration.GetSection("Platforms:GitHub"));
+builder.Services.Configure<PlatformSettings>("Bitbucket", builder.Configuration.GetSection("Platforms:Bitbucket"));
 
-builder.Services.AddTransient<IRepositoryMirrorService, RepositoryMirrorService>();
-builder.Services.AddTransient<IGitPlatformServiceFactory, GitPlatformServiceFactory>();
+builder.Services.AddTransient<IPlatformMirrorService, PlatformMirrorService>();
+builder.Services.AddTransient<IPlatformServiceFactory, PlatformServiceFactory>();
 
-builder.Services.AddTransient<IGitService, GitService>();
+builder.Services.AddTransient<IGitMirrorService, GitMirrorService>();
 
-builder.Services.AddTransient<IGitPlatformService, AzureDevOpsService>();
+builder.Services.AddTransient<IPlatformService, AzureDevOpsService>();
 builder.Services.AddTransient<IAzureDevOpsApiService, AzureDevOpsApiService>();
 builder.Services.AddHttpClient<IAzureDevOpsGateway, AzureDevOpsGateway>();
 
-builder.Services.AddTransient<IGitPlatformService, GitLabService>();
+builder.Services.AddTransient<IPlatformService, GitLabService>();
 builder.Services.AddTransient<IGitLabApiService, GitLabApiService>();
 builder.Services.AddHttpClient<IGitLabGateway, GitLabGateway>();
 
-builder.Services.AddTransient<IGitPlatformService, GitHubService>();
+builder.Services.AddTransient<IPlatformService, GitHubService>();
 builder.Services.AddTransient<IGitHubApiService, GitHubApiService>();
 builder.Services.AddHttpClient<IGitHubGateway, GitHubGateway>();
 
-builder.Services.AddTransient<IGitPlatformService, BitbucketService>();
+builder.Services.AddTransient<IPlatformService, BitbucketService>();
 builder.Services.AddTransient<IBitbucketApiService, BitbucketApiService>();
 builder.Services.AddHttpClient<IBitbucketGateway, BitbucketGateway>();
 
@@ -139,6 +142,10 @@ app.UseSpa(spa =>
     }
 });
 
-RecurringJob.AddOrUpdate<IRepositoryMirrorService>("Execute Git Repository Mirror", x => x.Execute(), Cron.Daily(), new RecurringJobOptions());
+using var scope = app.Services.CreateScope();
+var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+await db.Database.MigrateAsync();
+
+RecurringJob.AddOrUpdate<IPlatformMirrorService>("Execute Git Repository Mirror", x => x.Execute(), Cron.Daily(), new RecurringJobOptions());
 
 app.Run();
