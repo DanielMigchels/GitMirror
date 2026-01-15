@@ -6,9 +6,9 @@ namespace GitMirror.API.Services.PlatformIntegrationsService.Bitbucket.Api;
 
 public class BitbucketApiService(IBitbucketGateway bitbucketGateway) : IBitbucketApiService
 {
-    public async Task<List<Repository>> GetRepositories(string baseUrl, string username, string password)
+    public async Task<List<PlatformIntegrationRepository>> GetRepositories(string baseUrl, string username, string password)
     {
-        var allRepositories = new List<Repository>();
+        var allRepositories = new List<PlatformIntegrationRepository>();
         string? nextUrl = $"/2.0/repositories/{username}?pagelen=100";
 
         while (!string.IsNullOrEmpty(nextUrl))
@@ -20,7 +20,7 @@ public class BitbucketApiService(IBitbucketGateway bitbucketGateway) : IBitbucke
                 break;
             }
 
-            allRepositories.AddRange(response.Values.Select(r => new Repository
+            allRepositories.AddRange(response.Values.Select(r => new PlatformIntegrationRepository
             {
                 Name = r.Name,
                 CloneUrl = r.Links?.Clone?.FirstOrDefault(c => c.Name == "https")?.Href ?? string.Empty,
@@ -33,7 +33,7 @@ public class BitbucketApiService(IBitbucketGateway bitbucketGateway) : IBitbucke
         return allRepositories;
     }
 
-    public async Task<Repository> CreateRepository(string baseUrl, string username, string password, Repository repository)
+    public async Task<PlatformIntegrationRepository> CreateRepository(string baseUrl, string username, string password, PlatformIntegrationRepository repository)
     {
         if (repository == null)
         {
@@ -60,7 +60,7 @@ public class BitbucketApiService(IBitbucketGateway bitbucketGateway) : IBitbucke
 
         var createdRepository = await bitbucketGateway.Post<BitbucketRepository>(baseUrl, username, password, $"/2.0/repositories/{workspace}/{slug}", payload);
 
-        return new Repository
+        return new PlatformIntegrationRepository
         {
             Name = createdRepository.Name,
             CloneUrl = createdRepository.Links?.Clone?.FirstOrDefault(c => c.Name == "https")?.Href ?? string.Empty,

@@ -3,19 +3,19 @@ using GitMirror.API.Services.PlatformIntegrationsService.Models;
 
 namespace GitMirror.API.Services.PlatformIntegrationsService.GitLab;
 
-public class GitLabService(IGitLabApiService gitLabApiService) : IPlatformService
+public class GitLabService(IGitLabApiService gitLabApiService) : IPlatformIntegrationService
 {
-    public PlatformType GitPlatformType => PlatformType.GitLab;
+    public PlatformIntegrationType GitPlatformType => PlatformIntegrationType.GitLab;
     public string Username { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
     public string BaseUrl { get; set; } = string.Empty;
 
-    public async Task<List<Repository>> GetRepositories()
+    public async Task<List<PlatformIntegrationRepository>> GetRepositories()
     {
         return await gitLabApiService.GetRepositories(BaseUrl, Username, Password);
     }
 
-    public async Task<Repository> CreateRepository(Repository repository)
+    public async Task<PlatformIntegrationRepository> CreateRepository(PlatformIntegrationRepository repository)
     {
         return await gitLabApiService.CreateRepository(BaseUrl, Username, Password, repository);
     }

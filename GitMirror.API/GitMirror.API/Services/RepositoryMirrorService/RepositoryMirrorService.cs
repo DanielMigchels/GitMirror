@@ -1,0 +1,58 @@
+﻿using GitMirror.API.Data;
+using GitMirror.API.Services.GitMirrorService;
+using Microsoft.EntityFrameworkCore;
+
+namespace GitMirror.API.Services.RepositoryMirrorService;
+
+public class RepositoryMirrorService(ILogger<RepositoryMirrorService> logger, DatabaseContext db, IGitMirrorService gitMirrorService) : IRepositoryMirrorService
+{
+    public async Task Execute()
+    {
+        var repositories = await db.Repositories.AsNoTracking().Select(x => new 
+        { 
+            x.Id,
+            x.SourceCloneUrl,
+            x.SourceUsername,
+            x.SourcePassword,
+            x.TargetCloneUrl,
+            x.TargetUsername,
+            x.TargetPassword
+        }).ToListAsync();
+
+        var originalAutoDetect = db.ChangeTracker.AutoDetectChangesEnabled;
+        db.ChangeTracker.AutoDetectChangesEnabled = false;
+
+        try
+        {
+            foreach (var repository in repositories)
+            {
+                var history = new Data.Models.History
+                {
+                    Id = Guid.NewGuid(),
+                    RepositoryId = repository.Id,
+                    CreatedOnUtc = DateTimeOffset.UtcNow,
+                    State = Data.Enums.HistoryState.InProgress,
+                    MirrorId = null
+                };
+
+                db.Histories.Add(history);
+
+                try
+                {
+                    await gitMirrorService.MirrorAsync(repository.SourceCloneUrl, repository.SourceUsername, repository.SourcePassword, repository.TargetCloneUrl, repository.TargetUsername, repository.TargetPassword);
+                    history.State = Data.Enums.HistoryState.Successful;
+                }
+                catch
+                {
+                    history.State = Data.Enums.HistoryState.Failed;
+                }
+            }
+
+            await db.SaveChangesAsync();
+        }
+        finally
+        {
+            db.ChangeTracker.AutoDetectChangesEnabled = originalAutoDetect;
+        }
+    }
+}

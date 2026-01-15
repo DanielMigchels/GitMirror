@@ -2,9 +2,9 @@
 
 namespace GitMirror.API.Services.PlatformIntegrationsService;
 
-public class PlatformServiceFactory(IEnumerable<IPlatformService> services) : IPlatformServiceFactory
+public class PlatformIntegrationServiceFactory(IEnumerable<IPlatformIntegrationService> services) : IPlatformIntegrationServiceFactory
 {
-    public IPlatformService Create(Platform platform)
+    public IPlatformIntegrationService Create(Platform platform)
     {
         var service = services.Single(s => s.GitPlatformType == platform.Type);
         service.Username = platform.Username;

@@ -6,11 +6,11 @@ namespace GitMirror.API.Services.PlatformIntegrationsService.GitHub.Api;
 
 public class GitHubApiService(IGitHubGateway gitHubGateway) : IGitHubApiService
 {
-    public async Task<List<Repository>> GetRepositories(string baseUrl, string username, string password)
+    public async Task<List<PlatformIntegrationRepository>> GetRepositories(string baseUrl, string username, string password)
     {
         var perPage = 100;
         var page = 1;
-        var allRepositories = new List<Repository>();
+        var allRepositories = new List<PlatformIntegrationRepository>();
 
         while (true)
         {
@@ -21,7 +21,7 @@ public class GitHubApiService(IGitHubGateway gitHubGateway) : IGitHubApiService
                 break;
             }
 
-            allRepositories.AddRange(repos.Select(r => new Repository
+            allRepositories.AddRange(repos.Select(r => new PlatformIntegrationRepository
             {
                 Name = r.Name,
                 CloneUrl = r.CloneUrl,
@@ -39,7 +39,7 @@ public class GitHubApiService(IGitHubGateway gitHubGateway) : IGitHubApiService
         return allRepositories;
     }
 
-    public async Task<Repository> CreateRepository(string baseUrl, string username, string password, Repository repository)
+    public async Task<PlatformIntegrationRepository> CreateRepository(string baseUrl, string username, string password, PlatformIntegrationRepository repository)
     {
         if (repository == null)
         {
@@ -55,7 +55,7 @@ public class GitHubApiService(IGitHubGateway gitHubGateway) : IGitHubApiService
 
         var createdRepository = await gitHubGateway.Post<GitHubRepository>(baseUrl, username, password, "/user/repos", payload);
 
-        return new Repository
+        return new PlatformIntegrationRepository
         {
             Name = createdRepository.Name,
             CloneUrl = createdRepository.CloneUrl,

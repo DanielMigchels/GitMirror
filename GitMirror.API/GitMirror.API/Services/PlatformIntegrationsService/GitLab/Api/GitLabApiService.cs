@@ -6,11 +6,11 @@ namespace GitMirror.API.Services.PlatformIntegrationsService.GitLab.Api;
 
 public class GitLabApiService(IGitLabGateway gitLabGateway) : IGitLabApiService
 {
-    public async Task<List<Repository>> GetRepositories(string baseUrl, string username, string password)
+    public async Task<List<PlatformIntegrationRepository>> GetRepositories(string baseUrl, string username, string password)
     {
         var perPage = 20;
         var page = 1;
-        var allRepositories = new List<Repository>();
+        var allRepositories = new List<PlatformIntegrationRepository>();
 
         while (true)
         {
@@ -21,7 +21,7 @@ public class GitLabApiService(IGitLabGateway gitLabGateway) : IGitLabApiService
                 break;
             }                
 
-            allRepositories.AddRange(projects.Select(r => new Repository
+            allRepositories.AddRange(projects.Select(r => new PlatformIntegrationRepository
             {
                 Name = r.Name,
                 CloneUrl = r.HttpUrlToRepo,
@@ -35,7 +35,7 @@ public class GitLabApiService(IGitLabGateway gitLabGateway) : IGitLabApiService
     }
 
 
-    public async Task<Repository> CreateRepository(string baseUrl, string username, string password, Repository repository)
+    public async Task<PlatformIntegrationRepository> CreateRepository(string baseUrl, string username, string password, PlatformIntegrationRepository repository)
     {
         if (repository == null)
         {
@@ -53,7 +53,7 @@ public class GitLabApiService(IGitLabGateway gitLabGateway) : IGitLabApiService
 
         var createdRepository = await gitLabGateway.Post<GitLabProject>(baseUrl, username, password, "/api/v4/projects", payload);
 
-        return new Repository
+        return new PlatformIntegrationRepository
         {
             Name = createdRepository.Name,
             CloneUrl = createdRepository.HttpUrlToRepo,

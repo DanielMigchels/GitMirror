@@ -1,9 +1,9 @@
-﻿
+﻿using GitMirror.API.Data;
 using System.Diagnostics;
 
 namespace GitMirror.API.Services.GitMirrorService;
 
-public class GitMirrorService : IGitMirrorService
+public class GitMirrorService(DatabaseContext db) : IGitMirrorService
 {
     public async Task MirrorAsync(string sourceCloneUrl, string sourceUsername, string sourcePassword, string targetCloneUrl, string targetUsername, string targetPassword, CancellationToken cancellationToken = default)
     {

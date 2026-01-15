@@ -1,6 +1,6 @@
 ﻿namespace GitMirror.API.Services.PlatformIntegrationsService;
 
-public enum PlatformType
+public enum PlatformIntegrationType
 {
     AzureDevOps,
     GitLab,

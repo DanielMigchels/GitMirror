@@ -7,7 +7,7 @@ public class Platform
 {
     public Guid Id { get; set; } = Guid.NewGuid();
 
-    public PlatformType Type { get; set; }
+    public PlatformIntegrationType Type { get; set; }
 
     [MaxLength(256)]
     public string Username { get; set; } = string.Empty;

@@ -22,7 +22,55 @@ namespace GitMirror.API.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("GitMirror.API.Data.Models.GitPlatform", b =>
+            modelBuilder.Entity("GitMirror.API.Data.Models.History", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedOnUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("MirrorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("RepositoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("State")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MirrorId");
+
+                    b.HasIndex("RepositoryId");
+
+                    b.ToTable("Histories");
+                });
+
+            modelBuilder.Entity("GitMirror.API.Data.Models.Mirror", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("SourcePlatformId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TargetPlatformId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SourcePlatformId");
+
+                    b.HasIndex("TargetPlatformId");
+
+                    b.ToTable("Mirrors");
+                });
+
+            modelBuilder.Entity("GitMirror.API.Data.Models.Platform", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -48,7 +96,82 @@ namespace GitMirror.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GitPlatforms");
+                    b.ToTable("Platforms");
+                });
+
+            modelBuilder.Entity("GitMirror.API.Data.Models.Repository", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("SourceCloneUrl")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<string>("SourcePassword")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("SourceUsername")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("TargetCloneUrl")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<string>("TargetPassword")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("TargetUsername")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Repositories");
+                });
+
+            modelBuilder.Entity("GitMirror.API.Data.Models.History", b =>
+                {
+                    b.HasOne("GitMirror.API.Data.Models.Mirror", "Mirror")
+                        .WithMany()
+                        .HasForeignKey("MirrorId");
+
+                    b.HasOne("GitMirror.API.Data.Models.Repository", "Repository")
+                        .WithMany()
+                        .HasForeignKey("RepositoryId");
+
+                    b.Navigation("Mirror");
+
+                    b.Navigation("Repository");
+                });
+
+            modelBuilder.Entity("GitMirror.API.Data.Models.Mirror", b =>
+                {
+                    b.HasOne("GitMirror.API.Data.Models.Platform", "SourcePlatform")
+                        .WithMany()
+                        .HasForeignKey("SourcePlatformId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GitMirror.API.Data.Models.Platform", "TargetPlatform")
+                        .WithMany()
+                        .HasForeignKey("TargetPlatformId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SourcePlatform");
+
+                    b.Navigation("TargetPlatform");
                 });
 #pragma warning restore 612, 618
         }

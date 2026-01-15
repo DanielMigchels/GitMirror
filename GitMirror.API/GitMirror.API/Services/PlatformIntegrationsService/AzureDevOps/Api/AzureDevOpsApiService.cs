@@ -6,10 +6,10 @@ namespace GitMirror.API.Services.PlatformIntegrationsService.AzureDevOps.Api;
 
 public class AzureDevOpsApiService(IAzureDevOpsGateway azureDevOpsGateway) : IAzureDevOpsApiService
 {
-    public async Task<List<Repository>> GetRepositories(string baseUrl, string username, string password)
+    public async Task<List<PlatformIntegrationRepository>> GetRepositories(string baseUrl, string username, string password)
     {
         var repositories = await azureDevOpsGateway.Get<AzureDevOpsRepositories>(baseUrl, username, password, "/_apis/git/repositories?api-version=6.0");
-        return [.. repositories.Value.Select(r => new Repository
+        return [.. repositories.Value.Select(r => new PlatformIntegrationRepository
         {
             Name = r.Name,
             CloneUrl = r.RemoteUrl,
@@ -17,7 +17,7 @@ public class AzureDevOpsApiService(IAzureDevOpsGateway azureDevOpsGateway) : IAz
         })];
     }
 
-    public async Task<Repository> CreateRepository(string baseUrl, string username, string password, Repository repository)
+    public async Task<PlatformIntegrationRepository> CreateRepository(string baseUrl, string username, string password, PlatformIntegrationRepository repository)
     {
         if (repository == null)
         {
@@ -34,7 +34,7 @@ public class AzureDevOpsApiService(IAzureDevOpsGateway azureDevOpsGateway) : IAz
 
         var createdRepository = await azureDevOpsGateway.Post<AzureDevOpsRepository, AzureDevOpsRepository>(baseUrl, username, password, "/_apis/git/repositories?api-version=6.0", payload);
 
-        return new Repository
+        return new PlatformIntegrationRepository
         {
             Name = createdRepository.Name,
             CloneUrl = createdRepository.RemoteUrl,

@@ -1,5 +1,4 @@
 ﻿using GitMirror.API.Data;
-using GitMirror.API.Data.Models;
 using GitMirror.API.Services.PaginationService;
 using GitMirror.API.Services.PlatformService.Models;
 using Microsoft.EntityFrameworkCore;
@@ -8,44 +7,49 @@ namespace GitMirror.API.Services.PlatformService;
 
 public class PlatformService(DatabaseContext db) : IPlatformService
 {
-    public async Task<PaginatedList<PlatformResponseModel>> Get(int pageSize = 2147483647, int page = 0)
+    public async Task<PaginatedList<PlatformResponseModel>> Get(int pageSize, int page)
     {
-        var data = await db.Platforms.AsNoTracking()
+        var query = db.Platforms.AsQueryable();
+
+        var totalCount = await query.CountAsync();
+        var items = await query
             .Skip(page * pageSize)
             .Take(pageSize)
-            .Select(x => new PlatformResponseModel()
+            .Select(p => new PlatformResponseModel
             {
-                Id = x.Id,
-                Username = x.Username,
-                BaseUrl = x.BaseUrl,
-                Type = x.Type,
+                Id = p.Id,
+                Type = p.Type,
+                Username = p.Username,
+                BaseUrl = p.BaseUrl
             })
             .ToListAsync();
 
-        return new PaginatedList<PlatformResponseModel>()
+        return new PaginatedList<PlatformResponseModel>
         {
-            Data = data,
-            HasNext = await db.Platforms.Skip((page + 1) * pageSize).AnyAsync(),
-            HasPrevious = page > 0,
             Page = page,
-            PageSize = pageSize
+            PageSize = pageSize,
+            HasNext = (page + 1) * pageSize < totalCount,
+            HasPrevious = page > 0,
+            Data = items
         };
     }
 
     public async Task<PlatformResponseModel?> GetById(Guid id)
     {
-        var platform = await db.Platforms.AsNoTracking()
-            .Where(x => x.Id == id)
-            .Select(x => new PlatformResponseModel()
-            {
-                Id = x.Id,
-                Username = x.Username,
-                BaseUrl = x.BaseUrl,
-                Type = x.Type,
-            })
-            .FirstOrDefaultAsync();
+        var platform = await db.Platforms.FindAsync(id);
+        
+        if (platform == null)
+        {
+            return null;
+        }
 
-        return platform;
+        return new PlatformResponseModel
+        {
+            Id = platform.Id,
+            Type = platform.Type,
+            Username = platform.Username,
+            BaseUrl = platform.BaseUrl
+        };
     }
 
     public async Task<PlatformResponseModel> Create(PlatformRequestModel request)
@@ -72,10 +76,12 @@ public class PlatformService(DatabaseContext db) : IPlatformService
 
     public async Task<PlatformResponseModel?> Update(Guid id, PlatformRequestModel request)
     {
-        var platform = await db.Platforms.FirstOrDefaultAsync(x => x.Id == id);
+        var platform = await db.Platforms.FindAsync(id);
         
         if (platform == null)
+        {
             return null;
+        }
 
         platform.Type = request.Type;
         platform.Username = request.Username;
@@ -95,14 +101,16 @@ public class PlatformService(DatabaseContext db) : IPlatformService
 
     public async Task<bool> Delete(Guid id)
     {
-        var platform = await db.Platforms.FirstOrDefaultAsync(x => x.Id == id);
+        var platform = await db.Platforms.FindAsync(id);
         
         if (platform == null)
+        {
             return false;
+        }
 
         db.Platforms.Remove(platform);
         await db.SaveChangesAsync();
-
+        
         return true;
     }
 }
