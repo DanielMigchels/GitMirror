@@ -25,6 +25,7 @@ using Serilog.Sinks.Network;
 using GitMirror.API.Data;
 using Microsoft.EntityFrameworkCore;
 using GitMirror.API.Services.RepositoryMirrorService;
+using Hangfire.Dashboard.BasicAuthorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,7 +49,7 @@ builder.Services.AddDbContext<DatabaseContext>(options => options.UseNpgsql(buil
 
 builder.Services.AddSpaStaticFiles(configuration =>
 {
-    configuration.RootPath = "wwwroot/";
+    configuration.RootPath = "wwwroot/GitMirror.UI/browser/";
 });
 
 builder.Services.AddSwaggerGen(c =>
@@ -121,25 +122,23 @@ app.UseEndpoints(endpoints =>
 
 app.UseHangfireDashboard("/hangfire", new DashboardOptions
 {
-    /*
-        Authorization = new[]
+    Authorization = new[]
+    {
+        new BasicAuthAuthorizationFilter(new BasicAuthAuthorizationFilterOptions
         {
-            new BasicAuthAuthorizationFilter(new BasicAuthAuthorizationFilterOptions
-            {
-                RequireSsl = false,
-                SslRedirect = false,
-                LoginCaseSensitive = false,
-                Users =
-                [
-                    new BasicAuthAuthorizationUser
-                    {
-                        Login = "admin",
-                        PasswordClear = "admin"
-                    }
-                ]
-            })
-        }
-    */
+            RequireSsl = false,
+            SslRedirect = false,
+            LoginCaseSensitive = false,
+            Users =
+            [
+                new BasicAuthAuthorizationUser
+                {
+                    Login = builder.Configuration["Hangfire:Username"] ?? "admin",
+                    PasswordClear = builder.Configuration["Hangfire:Password"] ?? "admin"
+                }
+            ]
+        })
+    }
 });
 
 app.UseSpa(spa =>
