@@ -1,4 +1,3 @@
-using GitMirror.API.Options;
 using GitMirror.API.Services.GitMirrorService;
 using GitMirror.API.Services.PlatformMirrorService;
 using GitMirror.API.Services.PlatformIntegrationsService;

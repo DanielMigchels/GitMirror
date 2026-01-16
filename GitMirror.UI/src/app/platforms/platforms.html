@@ -1,1 +1,46 @@
-<p>platforms works!</p>
+<div class="flex flex-col gap-4">
+    <div class="">
+    <h2 class="font-bold text-2xl">Platforms</h2>
+    <p class="text-text/45 font-light">Connect your Git platforms (GitHub, GitLab, Azure DevOps, Bitbucket) with API credentials. Set them up as mirrored environments, and repositories will automatically be created from the source provider to the target provider.</p>
+    <div class="mt-3 border-b border-b-text/20"></div>
+  </div>
+  <!--
+
+  If you have platforms, but no mirrors, show this message instead:
+
+  <div class="border-l-4 border-text rounded shadow-xl max-w-[1000px]">
+    <div class="flex flex-row gap-4 justify-start items-start p-4 bg-gradient-to-r to-primary/20 rounded">
+      <div class="text-3xl">
+        <ng-icon name="heroExclamationCircle"></ng-icon>
+      </div>
+      <div class="flex flex-col gap-2">
+        <h3 class="text-lg font-bold">Add a mirror to start syncing.</h3>
+        <p>Platforms are the Git hosting services where your repositories live, such as GitHub, GitLab, or Bitbucket. After adding at least two platforms with their access credentials, you can set up a mirror to automatically synchronize repositories between them.</p>
+        <div>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <a routerLink="/mirrors"
+              class="px-5 py-2.5 bg-primary hover:bg-primary/70 text-white font-medium rounded-lg shadow-md hover:shadow-lg cursor-pointer">
+              Setup a mirror
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>  
+  -->
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
+    <!--
+    <div class="flex flex-col justify-center items-center bg-background-dark border shadow border-text/20 px-6 py-6 min-h-[200px]">
+      <h3>Test</h3>
+    </div>    
+    -->
+    <div class="flex flex-col justify-center items-center bg-background-dark border shadow border-text/20 px-6 py-6 min-h-[200px] cursor-pointer hover:bg-background-darkest transition">
+      <div class="  bg-background-darker text-text/50 flex justify-center items-center rounded-full border border-text/20 w-12 h-12">
+        <ng-icon name="heroPlus" class="text-4xl"></ng-icon>
+      </div>
+      <div class="text-center mt-2 text-text/50">Add Platform</div>
+    </div>
+  </div>
+
+</div>

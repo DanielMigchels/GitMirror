@@ -25,6 +25,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Migrations\" />
+	  <Folder Include="Options\" />
 	  <Folder Include="Services\HistoryService\" />
 	  <Folder Include="Services\RepositoryService\" />
 	  <Folder Include="wwwroot\" />
