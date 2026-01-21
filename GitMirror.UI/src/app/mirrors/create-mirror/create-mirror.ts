@@ -7,11 +7,10 @@ import { PlatformResponse } from '../../../services/platform/models/platform-res
 import { PlatformType } from '../../../services/platform/models/platform-type.enum';
 import { Loader } from '../../../components/loader/loader';
 import { NgIf, NgFor } from '@angular/common';
-import { NgIcon, NgIconComponent } from "@ng-icons/core";
 
 @Component({
   selector: 'app-create-mirror',
-  imports: [GenericOffCanvasDrawer, ReactiveFormsModule, Loader, NgIf, NgFor, NgIcon, NgIconComponent],
+  imports: [GenericOffCanvasDrawer, ReactiveFormsModule, Loader, NgIf, NgFor],
   templateUrl: './create-mirror.html',
   styleUrl: './create-mirror.css',
 })

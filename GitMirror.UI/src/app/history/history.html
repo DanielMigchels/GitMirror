@@ -5,7 +5,7 @@
     <div class="mt-3 border-b border-b-text/20"></div>
   </div>
 
-  <app-generic-banner title="Your sync history is empty">
+  <app-generic-banner *ngIf="mirrors?.data?.length === 0 && repositories?.data?.length === 0" title="Your sync history is empty">
     <p>This page displays the history of all your repository synchronizations. However, since you haven't configured any repositories or connected any Git platforms yet, there's no sync history to show.</p>
     <p>Once you set up your mirrors, all sync activities, successes, and failures will be tracked and displayed here.</p>
 
