@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { NgIconComponent } from '@ng-icons/core';
+import { GenericBanner } from '../../components/generic-banner/generic-banner';
 
 @Component({
   selector: 'app-history',
-  imports: [NgIconComponent, RouterLink],
+  imports: [RouterLink, GenericBanner],
   templateUrl: './history.html',
   styleUrl: './history.css',
 })

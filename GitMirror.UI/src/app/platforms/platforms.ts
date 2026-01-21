@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgIconComponent } from '@ng-icons/core';
+import { GenericBanner } from '../../components/generic-banner/generic-banner';
 import { CreatePlatform } from "./create-platform/create-platform";
 import { EditPlatform } from './edit-platform/edit-platform';
 import { DeletePlatform } from './delete-platform/delete-platform';
@@ -14,7 +15,7 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-platforms',
-  imports: [NgIconComponent, CreatePlatform, EditPlatform, DeletePlatform, NgIf, NgFor, RouterLink],
+  imports: [NgIconComponent, GenericBanner, CreatePlatform, EditPlatform, DeletePlatform, NgIf, NgFor],
   templateUrl: './platforms.html',
   styleUrl: './platforms.css',
 })

@@ -21,9 +21,9 @@
 
     <div class="flex flex-col gap-1">
       <label class="text-sm font-medium">Password / PAT</label>
-      <input formControlName="password" type="password" class=" bg-background-darkest w-full px-3 py-2 rounded placeholder:text-text/20" placeholder="Enter password or API token">
+      <input formControlName="password" type="password" class=" bg-background-darkest w-full px-3 py-2 rounded placeholder:text-text/20" placeholder="Enter password or PAT token">
       <div *ngIf="formGroup.get('password')?.invalid && formGroup.get('password')?.touched" class="text-error text-sm">
-        <span *ngIf="formGroup.get('password')?.errors?.['required']">Enter a password or API token.</span>
+        <span *ngIf="formGroup.get('password')?.errors?.['required']">Enter a password or PAT token.</span>
       </div>
     </div>
 
