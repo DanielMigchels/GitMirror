@@ -32,7 +32,7 @@
         <p class="text-text/50 text-sm mb-1">@{{ platform.username }}</p>
         <p class="text-text/40 text-xs truncate w-full text-center">{{ platform.baseUrl }}</p>
       </div>
-      <div class="flex bg-background-darker">
+      <div class="flex bg-background-dark">
         <button (click)="editPlatform($event, platform)"
           class="flex-1 px-4 py-2 hover:bg-background-darkest transition text-sm flex items-center justify-center gap-2 cursor-pointer">
           <ng-icon name="heroPencil" class="text-base"></ng-icon>
@@ -59,11 +59,11 @@
 
   <div *ngIf="platforms">
     <div class="flex justify-end gap-1">
-      <button class="bg-background-dark hover:bg-background-darkest border-text/20 px-3 py-2 rounded cursor-pointer"
+      <button class="bg-background-dark hover:bg-background-darkest px-3 py-2 rounded cursor-pointer"
         *ngIf="platforms.hasPrevious" (click)="previousPage()">
         Back
       </button>
-      <button class="bg-background-dark hover:bg-background-darkest border-text/20 px-3 py-2 rounded cursor-pointer"
+      <button class="bg-background-dark hover:bg-background-darkest px-3 py-2 rounded cursor-pointer"
         *ngIf="platforms.hasNext" (click)="nextPage()">
         Next
       </button>

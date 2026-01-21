@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { NgIconComponent } from '@ng-icons/core';
 
 @Component({
@@ -17,6 +17,14 @@ export class GenericOffCanvasDrawer {
   @Input() title: string = '';
 
   constructor() { }
+
+  @HostListener('document:keydown', ['$event'])
+  onEscapeKey(event: KeyboardEvent) {
+    if (event.key === 'Escape' && this.showDrawer && !this.isClosing) {
+      event.preventDefault();
+      this.closeDrawer();
+    }
+  }
 
   openDrawer(event: Event) {
     event.stopPropagation();

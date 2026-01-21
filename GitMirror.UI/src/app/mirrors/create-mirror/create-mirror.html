@@ -1,0 +1,39 @@
+<app-generic-off-canvas-drawer #drawer title="Add Mirror">
+  <form [formGroup]="formGroup" class="flex flex-col gap-4">
+    
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium">Source Platform</label>
+      <select formControlName="sourcePlatformId" class="bg-background-darkest w-full px-3 py-2 rounded placeholder:text-text/20">
+        <option value="" disabled selected>Select source platform</option>
+        <option *ngFor="let platform of platforms" [value]="platform.id">{{ getPlatformLabel(platform.type) }} - @{{ platform.username }}
+        </option>
+      </select>
+      <div *ngIf="formGroup.get('sourcePlatformId')?.invalid && formGroup.get('sourcePlatformId')?.touched" class="text-error text-sm">
+        <span *ngIf="formGroup.get('sourcePlatformId')?.errors?.['required']">Select a source platform.</span>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium">Target Platform</label>
+      <select formControlName="targetPlatformId" class="bg-background-darkest w-full px-3 py-2 rounded placeholder:text-text/20">
+        <option value="" disabled selected>Select target platform</option>
+        <option *ngFor="let platform of platforms" [value]="platform.id">{{ getPlatformLabel(platform.type) }} - @{{ platform.username }}</option>
+      </select>
+      <div *ngIf="formGroup.get('targetPlatformId')?.invalid && formGroup.get('targetPlatformId')?.touched" class="text-error text-sm">
+        <span *ngIf="formGroup.get('targetPlatformId')?.errors?.['required']">Select a target platform.</span>
+      </div>
+    </div>
+
+    <div class="text-xs text-text/60 bg-background-darkest p-3 rounded">
+      <p class="mb-2">Mirrors synchronize repositories from a source platform to a target platform automatically.</p>
+      <p>Select the platform where your repositories currently exist (source) and where you want to mirror them to (target).</p>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-4">
+      <button type="button" *ngIf="!isSubmitting" (click)="createMirror()" class="shadow rounded py-2 px-4 bg-information hover:bg-information/90 cursor-pointer">
+        Create Mirror
+      </button>
+      <app-loader *ngIf="isSubmitting"></app-loader>
+    </div>
+  </form>
+</app-generic-off-canvas-drawer>

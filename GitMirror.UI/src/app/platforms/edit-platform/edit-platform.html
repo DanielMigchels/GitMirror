@@ -4,6 +4,7 @@
     <div class="flex flex-col gap-1">
       <label class="text-sm font-medium">Platform Type</label>
       <select formControlName="type" class="bg-background-darkest w-full px-3 py-2 rounded placeholder:text-text/20">
+        <option value="" disabled selected>Select platform type</option>
         <option *ngFor="let platform of platformTypes" [ngValue]="platform.value">{{ platform.label }}</option>
       </select>
       <div *ngIf="formGroup.get('type')?.invalid && formGroup.get('type')?.touched" class="text-error text-sm">

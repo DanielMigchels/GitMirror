@@ -1,14 +1,14 @@
 <div class="flex flex-col gap-4">
   <div class="">
     <h2 class="font-bold text-2xl">Mirrors</h2>
-    <p class="text-text/45 font-light">Connect your Git platforms to automatically sync repositories between source and target providers.</p>
+    <p class="text-text/45 font-light">Connect your Git platforms to automatically sync repositories between source and
+      target providers.</p>
     <div class="mt-3 border-b border-b-text/20"></div>
   </div>
-
-
-  <app-generic-banner title="To add a mirror, you need to connect your git platforms.">
-    <p>Mirrors allow you to automatically synchronize repositories between different Git platforms. To get started, you'll need to connect at least two platforms where your repositories are hosted.</p>
-
+  <app-generic-banner *ngIf="platforms && platforms.data.length < 2"
+    title="To add a mirror, you need to connect your git platforms.">
+    <p>Mirrors allow you to automatically synchronize repositories between different Git platforms. To get started,
+      you'll need to connect at least two platforms where your repositories are hosted.</p>
     <div>
       <div class="flex flex-col sm:flex-row gap-3">
         <a routerLink="/platforms"
@@ -18,4 +18,73 @@
       </div>
     </div>
   </app-generic-banner>
+
+  <div class="grid grid-cols-1 gap-4" *ngIf="mirrors && mirrors.data.length > 0">
+    <div *ngFor="let mirror of mirrors.data" class="bg-background-dark shadow rounded overflow-hidden hover:bg-background-darker transition-colors ">
+      <div class="flex gap-4 flex-col lg:flex-row lg:justify-between lg:items-center">
+        <div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 flex-1">
+          <div class="flex items-center gap-3 sm:gap-4 p-4 sm:p-6">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-background-darker flex justify-center items-center">
+              <ng-icon [name]="getPlatform(mirror.sourcePlatformId) ? getPlatformIcon(getPlatform(mirror.sourcePlatformId)!.type) : 'heroCodeBracket'" class="text-lg sm:text-xl"></ng-icon>
+            </div>
+            <div class="flex flex-col">
+              <div class="font-semibold text-sm sm:text-base">{{ getPlatform(mirror.sourcePlatformId) ? getPlatformLabel(getPlatform(mirror.sourcePlatformId)!.type) : 'Unknown' }}</div>
+              <div class="text-xs sm:text-sm text-text/60">@{{ getPlatform(mirror.sourcePlatformId)?.username || 'Unknown' }}</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 px-2 sm:px-4 rotate-90 sm:rotate-0">
+            <ng-icon name="heroChevronRight" class="text-xl sm:text-2xl text-text/30"></ng-icon>
+          </div>
+          <div class="flex items-center gap-3 sm:gap-4">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-background-darker flex justify-center items-center">
+              <ng-icon [name]="getPlatform(mirror.targetPlatformId) ? getPlatformIcon(getPlatform(mirror.targetPlatformId)!.type) : 'heroCodeBracket'" class="text-lg sm:text-xl"></ng-icon>
+            </div>
+            <div class="flex flex-col">
+              <div class="font-semibold text-sm sm:text-base">{{ getPlatform(mirror.targetPlatformId) ? getPlatformLabel(getPlatform(mirror.targetPlatformId)!.type) : 'Unknown' }}</div>
+              <div class="text-xs sm:text-sm text-text/60">@{{ getPlatform(mirror.targetPlatformId)?.username || 'Unknown' }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-row sm:flex-col items-stretch justify-stretch w-full sm:w-auto">
+          <button (click)="editMirror($event, mirror)"
+            class="px-4 py-3 sm:py-2 hover:bg-background-darkest transition text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer flex-1 sm:flex-auto">
+            <ng-icon name="heroPencil" class="text-sm sm:text-base"></ng-icon>
+            Edit
+          </button>
+          <button (click)="deleteMirror($event, mirror)"
+            class="px-4 py-3 sm:py-2 hover:bg-background-darkest transition text-xs sm:text-sm text-error flex items-center justify-center gap-2 cursor-pointer flex-1 sm:flex-auto">
+            <ng-icon name="heroTrash" class="text-sm sm:text-base"></ng-icon>
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button (click)="addMirror($event)"
+    class="w-full bg-background-dark hover:bg-background-darker shadow rounded px-6 py-4 cursor-pointer transition-colors flex items-center justify-center gap-3">
+    <div
+      class="w-8 h-8 bg-background-darker text-text/50 flex justify-center items-center rounded-full border border-text/20">
+      <ng-icon name="heroPlus" class="text-xl"></ng-icon>
+    </div>
+    <span class="text-sm text-text/60">Add Mirror</span>
+  </button>
+
+  <div *ngIf="mirrors">
+    <div class="flex justify-end gap-1">
+      <button class="bg-background-dark hover:bg-background-darkest px-3 py-2 rounded cursor-pointer"
+        *ngIf="mirrors.hasPrevious" (click)="previousPage()">
+        Back
+      </button>
+      <button class="bg-background-dark hover:bg-background-darkest px-3 py-2 rounded cursor-pointer"
+        *ngIf="mirrors.hasNext" (click)="nextPage()">
+        Next
+      </button>
+    </div>
+  </div>
 </div>
+
+
+<app-create-mirror #addmirrorDrawer [platforms]="platforms?.data || []" (drawerClosed)="fetchData()"></app-create-mirror>
+<app-edit-mirror #editmirrorDrawer [platforms]="platforms?.data || []" [mirror]="selectedMirror" (drawerClosed)="fetchData()"></app-edit-mirror>
+<app-delete-mirror #deletemirrorDrawer [platforms]="platforms?.data || []" [mirror]="selectedMirror" (drawerClosed)="fetchData()"></app-delete-mirror>

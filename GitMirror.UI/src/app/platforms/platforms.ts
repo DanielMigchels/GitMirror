@@ -15,7 +15,7 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-platforms',
-  imports: [NgIconComponent, GenericBanner, CreatePlatform, EditPlatform, DeletePlatform, NgIf, NgFor],
+  imports: [NgIconComponent, GenericBanner, CreatePlatform, EditPlatform, DeletePlatform, RouterLink, NgIf, NgFor],
   templateUrl: './platforms.html',
   styleUrl: './platforms.css',
 })
