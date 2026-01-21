@@ -1,0 +1,75 @@
+<app-generic-off-canvas-drawer #drawer title="Add Platform">
+  <form [formGroup]="formGroup" class="flex flex-col gap-4">
+    
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium">Platform Type</label>
+      <select formControlName="type" class="bg-background-darkest w-full px-3 py-2 rounded placeholder:text-text/20">
+        <option *ngFor="let platform of platformTypes" [ngValue]="platform.value">{{ platform.label }}</option>
+      </select>
+      <div *ngIf="formGroup.get('type')?.invalid && formGroup.get('type')?.touched" class="text-error text-sm">
+        <span *ngIf="formGroup.get('type')?.errors?.['required']">Select a platform type.</span>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium">Username</label>
+      <input formControlName="username" type="text" class=" bg-background-darkest w-full px-3 py-2 rounded placeholder:text-text/20" placeholder="Enter username">
+      <div *ngIf="formGroup.get('username')?.invalid && formGroup.get('username')?.touched" class="text-error text-sm">
+        <span *ngIf="formGroup.get('username')?.errors?.['required']">Enter a username.</span>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium">Password / PAT</label>
+      <input formControlName="password" type="password" class=" bg-background-darkest w-full px-3 py-2 rounded placeholder:text-text/20" placeholder="Enter password or API token">
+      <div *ngIf="formGroup.get('password')?.invalid && formGroup.get('password')?.touched" class="text-error text-sm">
+        <span *ngIf="formGroup.get('password')?.errors?.['required']">Enter a password or API token.</span>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium">Base URL</label>
+      <input formControlName="baseUrl" type="text" class=" bg-background-darkest w-full px-3 py-2 rounded placeholder:text-text/20" placeholder="https://api.github.com">
+      <div *ngIf="formGroup.get('baseUrl')?.invalid && formGroup.get('baseUrl')?.touched" class="text-error text-sm">
+        <span *ngIf="formGroup.get('baseUrl')?.errors?.['required']">Enter a base URL.</span>
+      </div>
+      <div class="text-xs text-text/60 mt-1">
+        <div class="mb-2 italic">Examples:</div>
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-b border-text/20">
+              <th class="text-left py-1 px-2 font-medium">Platform</th>
+              <th class="text-left py-1 px-2 font-medium">Base URL</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-text/10">
+              <td class="py-1 px-2">Azure DevOps</td>
+              <td class="py-1 px-2 font-mono">https://yourorganization.visualstudio.com/</td>
+            </tr>
+            <tr class="border-b border-text/10">
+              <td class="py-1 px-2">GitHub</td>
+              <td class="py-1 px-2 font-mono">https://api.github.com/</td>
+            </tr>
+            <tr class="border-b border-text/10">
+              <td class="py-1 px-2">GitLab</td>
+              <td class="py-1 px-2 font-mono">https://gitlab.yourorganization.com/</td>
+            </tr>
+            <tr>
+              <td class="py-1 px-2">Bitbucket</td>
+              <td class="py-1 px-2 font-mono">https://api.bitbucket.org/</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="flex justify-end items-center mt-2">
+      <button *ngIf="!isSubmitting" type="submit" class="shadow rounded py-2 px-4 bg-information hover:bg-information/90 cursor-pointer" (click)="createPlatform()"
+        [disabled]="isSubmitting">
+        Add Platform
+      </button>
+      <app-loader *ngIf="isSubmitting"></app-loader>
+    </div>
+  </form>
+</app-generic-off-canvas-drawer>

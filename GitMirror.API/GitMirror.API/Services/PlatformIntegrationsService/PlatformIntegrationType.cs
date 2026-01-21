@@ -2,8 +2,8 @@
 
 public enum PlatformIntegrationType
 {
-    AzureDevOps,
-    GitLab,
-    GitHub,
-    Bitbucket
+    AzureDevOps = 1,
+    GitLab = 2,
+    GitHub = 3,
+    Bitbucket = 4
 }

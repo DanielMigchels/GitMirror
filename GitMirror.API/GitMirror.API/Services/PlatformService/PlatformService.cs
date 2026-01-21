@@ -85,7 +85,12 @@ public class PlatformService(DatabaseContext db) : IPlatformService
 
         platform.Type = request.Type;
         platform.Username = request.Username;
-        platform.Password = request.Password;
+
+        if (!string.IsNullOrWhiteSpace(request.Password))
+        {
+            platform.Password = request.Password;
+        }
+        
         platform.BaseUrl = request.BaseUrl;
 
         await db.SaveChangesAsync();

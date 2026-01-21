@@ -1,6 +1,6 @@
 export enum PlatformType {
-  AzureDevOps = 0,
-  GitLab = 1,
-  GitHub = 2,
-  Bitbucket = 3
+  AzureDevOps = 1,
+  GitLab = 2,
+  GitHub = 3,
+  Bitbucket = 4
 }
