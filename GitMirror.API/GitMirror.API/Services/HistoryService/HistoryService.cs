@@ -2,6 +2,7 @@ using GitMirror.API.Data;
 using GitMirror.API.Data.Models;
 using GitMirror.API.Services.HistoryService.Models;
 using GitMirror.API.Services.PaginationService;
+using GitMirror.API.Services.PlatformIntegrationsService;
 using Microsoft.EntityFrameworkCore;
 
 namespace GitMirror.API.Services.HistoryService;
@@ -24,7 +25,11 @@ public class HistoryService(DatabaseContext db) : IHistoryService
                 State = h.State,
                 CreatedOnUtc = h.CreatedOnUtc,
                 MirrorId = h.MirrorId,
-                RepositoryId = h.RepositoryId
+                RepositoryId = h.RepositoryId,
+                SourceType = h.MirrorId != null && h.Mirror != null && h.Mirror.SourcePlatform != null ? (PlatformIntegrationType?)h.Mirror.SourcePlatform.Type : null,
+                SoureBaseUrl = h.MirrorId != null && h.Mirror != null && h.Mirror.SourcePlatform != null ? h.Mirror.SourcePlatform.BaseUrl : (h.Repository != null ? h.Repository.SourceCloneUrl : null),
+                TargetType = h.MirrorId != null && h.Mirror != null && h.Mirror.TargetPlatform != null ? (PlatformIntegrationType?)h.Mirror.TargetPlatform.Type : null,
+                TargetBaseUrl = h.MirrorId != null && h.Mirror != null && h.Mirror.TargetPlatform != null ? h.Mirror.TargetPlatform.BaseUrl : (h.Repository != null ? h.Repository.TargetCloneUrl : null),
             })
             .ToListAsync();
 
@@ -46,7 +51,7 @@ public class HistoryService(DatabaseContext db) : IHistoryService
         {
             return null;
         }
-
+        
         return new HistoryResponseModel
         {
             Id = history.Id,

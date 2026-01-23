@@ -148,9 +148,17 @@ app.UseSpa(spa =>
     }
 });
 
-using var scope = app.Services.CreateScope();
-var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-await db.Database.MigrateAsync();
+try
+{
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+    await db.Database.MigrateAsync();
+}
+catch (Exception ex)
+{
+    Log.Logger.Information("An error occurred while migrating the database: {Message}", ex.Message);
+}
+
 
 RecurringJob.AddOrUpdate<IPlatformMirrorService>("Execute Platform Mirror", x => x.Execute(), Cron.Daily(2), new RecurringJobOptions());
 RecurringJob.AddOrUpdate<IRepositoryMirrorService>("Execute Repository Mirror", x => x.Execute(), Cron.Daily(0), new RecurringJobOptions());

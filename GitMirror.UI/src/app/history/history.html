@@ -22,4 +22,8 @@
       </div>
     </div>
   </app-generic-banner>
+
+  
+  <app-generic-datagrid [data]="history" (next)="onNext()" (previous)="onPrevious()">
+  </app-generic-datagrid>
 </div>

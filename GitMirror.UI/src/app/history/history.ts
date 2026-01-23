@@ -9,10 +9,11 @@ import { PaginatedList } from '../../services/pagination/paginated-list.interfac
 import { RepositoryService } from '../../services/repository/history.service';
 import { RepositoryResponse } from '../../services/repository/models/repository-response.interface';
 import { NgIf } from '@angular/common';
+import { GenericDatagrid } from "../../components/generic-datagrid/generic-datagrid";
 
 @Component({
   selector: 'app-history',
-  imports: [RouterLink, GenericBanner, NgIf],
+  imports: [RouterLink, GenericBanner, NgIf, GenericDatagrid],
   templateUrl: './history.html',
   styleUrl: './history.css',
 })
@@ -20,6 +21,8 @@ export class History {
   mirrors: PaginatedList<MirrorResponse> | undefined;
   repositories: PaginatedList<RepositoryResponse> | undefined;
   history: PaginatedList<HistoryResponse> | undefined;
+  currentPage = 0;
+  pageSize = 10;
 
   constructor(
     private mirrorService: MirrorService,
@@ -36,8 +39,26 @@ export class History {
       next: (x) => this.repositories = x
     });
 
-    this.historyService.get(1, 0).subscribe({
+    this.loadHistory();
+  }
+
+  loadHistory(): void {
+    this.historyService.get(this.pageSize, this.currentPage).subscribe({
       next: (x) => this.history = x
     });
+  }
+
+  onNext(): void {
+    if (this.history?.hasNext) {
+      this.currentPage++;
+      this.loadHistory();
+    }
+  }
+
+  onPrevious(): void {
+    if (this.history?.hasPrevious) {
+      this.currentPage--;
+      this.loadHistory();
+    }
   }
 }

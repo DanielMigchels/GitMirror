@@ -1,4 +1,5 @@
 using GitMirror.API.Data.Enums;
+using GitMirror.API.Services.PlatformIntegrationsService;
 
 namespace GitMirror.API.Services.HistoryService.Models;
 
@@ -9,4 +10,8 @@ public class HistoryResponseModel
     public DateTimeOffset CreatedOnUtc { get; set; }
     public Guid? MirrorId { get; set; }
     public Guid? RepositoryId { get; set; }
+    public PlatformIntegrationType? SourceType { get; set; }
+    public string? SoureBaseUrl { get; internal set; }
+    public PlatformIntegrationType? TargetType { get; internal set; }
+    public string? TargetBaseUrl { get; internal set; }
 }
