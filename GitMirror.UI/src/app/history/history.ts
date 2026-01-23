@@ -10,14 +10,18 @@ import { RepositoryService } from '../../services/repository/history.service';
 import { RepositoryResponse } from '../../services/repository/models/repository-response.interface';
 import { NgFor, NgIf, DatePipe } from '@angular/common';
 import { GenericDatagrid, GenericDatagridColumns, GenericDatagridColumn, GenericDatagridRow, GenericDatagridCell } from "../../components/generic-datagrid/generic-datagrid";
+import { HistoryState } from '../../services/history/models/history-state.enum';
+import { NgIcon } from '@ng-icons/core';
 
 @Component({
   selector: 'app-history',
-  imports: [RouterLink, GenericBanner, NgIf, NgFor, DatePipe, GenericDatagrid, GenericDatagridColumns, GenericDatagridColumn, GenericDatagridRow, GenericDatagridCell],
+  imports: [RouterLink, GenericBanner, NgIf, NgFor, NgIcon, DatePipe, GenericDatagrid, GenericDatagridColumns, GenericDatagridColumn, GenericDatagridRow, GenericDatagridCell],
   templateUrl: './history.html',
   styleUrl: './history.css',
 })
 export class History {
+  HistoryState = HistoryState;
+
   mirrors: PaginatedList<MirrorResponse> | undefined;
   repositories: PaginatedList<RepositoryResponse> | undefined;
   history: PaginatedList<HistoryResponse> | undefined;

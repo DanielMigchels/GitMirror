@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, ContentChildren, QueryList, AfterContentInit } from '@angular/core';
 import { PaginatedList } from '../../services/pagination/paginated-list.interface';
-import { NgFor, NgIf, NgClass } from '@angular/common';
+import { NgFor, NgIf, NgClass, NgTemplateOutlet } from '@angular/common';
 import { GenericDatagridColumn } from './generic-datagrid-column/generic-datagrid-column';
 import { GenericDatagridColumns } from './generic-datagrid-columns/generic-datagrid-columns';
 import { GenericDatagridRow } from './generic-datagrid-row/generic-datagrid-row';
@@ -8,7 +8,7 @@ import { GenericDatagridRow } from './generic-datagrid-row/generic-datagrid-row'
 @Component({
   selector: 'app-generic-datagrid',
   standalone: true,
-  imports: [NgFor, NgIf, NgClass],
+  imports: [NgFor, NgIf, NgClass, NgTemplateOutlet],
   templateUrl: './generic-datagrid.html',
   styleUrl: './generic-datagrid.css',
 })

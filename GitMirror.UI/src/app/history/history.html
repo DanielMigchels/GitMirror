@@ -1,22 +1,26 @@
 <div class="flex flex-col gap-4">
   <div class="">
     <h2 class="font-bold text-2xl">History</h2>
-    <p class="text-text/45 font-light">Track synchronization activity for each repository and monitor your mirror performance.</p>
+    <p class="text-text/45 font-light">Track synchronization activity for each repository and monitor your mirror
+      performance.</p>
     <div class="mt-3 border-b border-b-text/20"></div>
   </div>
 
-  <app-generic-banner *ngIf="mirrors?.data?.length === 0 && repositories?.data?.length === 0" title="Your sync history is empty">
-    <p>This page displays the history of all your repository synchronizations. However, since you haven't configured any repositories or connected any Git platforms yet, there's no sync history to show.</p>
-    <p>Once you set up your mirrors, all sync activities, successes, and failures will be tracked and displayed here.</p>
+  <app-generic-banner *ngIf="mirrors?.data?.length === 0 && repositories?.data?.length === 0"
+    title="Your sync history is empty">
+    <p>This page displays the history of all your repository synchronizations. However, since you haven't configured any
+      repositories or connected any Git platforms yet, there's no sync history to show.</p>
+    <p>Once you set up your mirrors, all sync activities, successes, and failures will be tracked and displayed here.
+    </p>
 
     <div>
       <div class="flex flex-col sm:flex-row gap-3">
         <a routerLink="/repositories"
-          class="px-5 py-2.5 bg-primary hover:bg-primary/70 text-white font-medium rounded-lg shadow-md hover:shadow-lg cursor-pointer">
+          class="px-5 py-2.5 bg-primary hover:bg-primary/70 text-white font-medium rounded shadow-md hover:shadow-lg cursor-pointer">
           Set up repositories
         </a>
         <a routerLink="/platforms"
-          class="px-5 py-2.5 bg-primary hover:bg-primary/70 text-white font-medium rounded-lg shadow-md hover:shadow-lg cursor-pointer">
+          class="px-5 py-2.5 bg-primary hover:bg-primary/70 text-white font-medium rounded shadow-md hover:shadow-lg cursor-pointer">
           Connect your Git platforms
         </a>
       </div>
@@ -26,6 +30,7 @@
   <app-generic-datagrid [data]="history" (next)="onNext()" (previous)="onPrevious()">
     <app-generic-datagrid-columns>
       <app-generic-datagrid-column>Id</app-generic-datagrid-column>
+      <app-generic-datagrid-column>Link</app-generic-datagrid-column>
       <app-generic-datagrid-column>Source</app-generic-datagrid-column>
       <app-generic-datagrid-column>Target</app-generic-datagrid-column>
       <app-generic-datagrid-column>State</app-generic-datagrid-column>
@@ -33,9 +38,34 @@
     </app-generic-datagrid-columns>
     <app-generic-datagrid-row *ngFor="let item of history?.data" [item]="item">
       <app-generic-datagrid-cell>{{ item.id }}</app-generic-datagrid-cell>
+      <app-generic-datagrid-cell>
+        <div *ngIf="item.mirrorId">
+          Mirror
+        </div>
+        <div *ngIf="item.repositoryId">
+          Repository
+        </div>
+      </app-generic-datagrid-cell>
       <app-generic-datagrid-cell>{{ item.sourceBaseUrl }}</app-generic-datagrid-cell>
       <app-generic-datagrid-cell>{{ item.targetBaseUrl }}</app-generic-datagrid-cell>
-      <app-generic-datagrid-cell>{{ item.state }}</app-generic-datagrid-cell>
+      <app-generic-datagrid-cell>
+        <div class="flex items-center gap-2" *ngIf="item.state === HistoryState.Queued">
+          <ng-icon name="heroClock" class="text-xl" />
+          <span>Queued</span>
+        </div>
+        <div class="flex items-center gap-2" *ngIf="item.state === HistoryState.InProgress">
+          <ng-icon name="heroArrowPath" class="text-xl" />
+          <span>In Progress</span>
+        </div>
+        <div class="flex items-center gap-2" *ngIf="item.state === HistoryState.Successful">
+          <ng-icon name="heroCheckCircle" class="text-xl text-" />
+          <span>Successful</span>
+        </div>
+        <div class="flex items-center gap-2" *ngIf="item.state === HistoryState.Failed">
+          <ng-icon name="heroXCircle" class="text-xl" />
+          <span>Failed</span>
+        </div>
+      </app-generic-datagrid-cell>
       <app-generic-datagrid-cell>{{ item.createdOnUtc | date:'short' }}</app-generic-datagrid-cell>
     </app-generic-datagrid-row>
   </app-generic-datagrid>

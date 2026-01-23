@@ -1,4 +1,4 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-generic-datagrid-column',
@@ -7,5 +7,5 @@ import { Component, ElementRef } from '@angular/core';
   styleUrl: './generic-datagrid-column.css',
 })
 export class GenericDatagridColumn {
-  constructor(public elementRef: ElementRef) {}
+  @ViewChild(TemplateRef, { static: true }) template!: TemplateRef<any>;
 }

@@ -11,7 +11,7 @@ import { PlatformService } from '../../services/platform/platform.service';
 import { MirrorService } from '../../services/mirror/mirror.service';
 import { MirrorResponse } from '../../services/mirror/models/mirror-response.interface';
 import { NgIf, NgFor } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-platforms',

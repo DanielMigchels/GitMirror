@@ -2,7 +2,6 @@ using GitMirror.API.Data;
 using GitMirror.API.Data.Models;
 using GitMirror.API.Services.HistoryService.Models;
 using GitMirror.API.Services.PaginationService;
-using GitMirror.API.Services.PlatformIntegrationsService;
 using Microsoft.EntityFrameworkCore;
 
 namespace GitMirror.API.Services.HistoryService;
@@ -26,10 +25,8 @@ public class HistoryService(DatabaseContext db) : IHistoryService
                 CreatedOnUtc = h.CreatedOnUtc,
                 MirrorId = h.MirrorId,
                 RepositoryId = h.RepositoryId,
-                SourceType = h.MirrorId != null && h.Mirror != null && h.Mirror.SourcePlatform != null ? (PlatformIntegrationType?)h.Mirror.SourcePlatform.Type : null,
-                SourceBaseUrl = h.MirrorId != null && h.Mirror != null && h.Mirror.SourcePlatform != null ? h.Mirror.SourcePlatform.BaseUrl : (h.Repository != null ? h.Repository.SourceCloneUrl : null),
-                TargetType = h.MirrorId != null && h.Mirror != null && h.Mirror.TargetPlatform != null ? (PlatformIntegrationType?)h.Mirror.TargetPlatform.Type : null,
-                TargetBaseUrl = h.MirrorId != null && h.Mirror != null && h.Mirror.TargetPlatform != null ? h.Mirror.TargetPlatform.BaseUrl : (h.Repository != null ? h.Repository.TargetCloneUrl : null),
+                SourceUrl = h.SourceUrl,
+                TargetUrl = h.TargetUrl
             })
             .ToListAsync();
 
@@ -46,12 +43,12 @@ public class HistoryService(DatabaseContext db) : IHistoryService
     public async Task<HistoryResponseModel?> GetById(Guid id)
     {
         var history = await db.Histories.FindAsync(id);
-        
+
         if (history == null)
         {
             return null;
         }
-        
+
         return new HistoryResponseModel
         {
             Id = history.Id,
@@ -88,7 +85,7 @@ public class HistoryService(DatabaseContext db) : IHistoryService
     public async Task<HistoryResponseModel?> Update(Guid id, HistoryRequestModel request)
     {
         var history = await db.Histories.FindAsync(id);
-        
+
         if (history == null)
         {
             return null;
@@ -113,7 +110,7 @@ public class HistoryService(DatabaseContext db) : IHistoryService
     public async Task<bool> Delete(Guid id)
     {
         var history = await db.Histories.FindAsync(id);
-        
+
         if (history == null)
         {
             return false;
@@ -121,7 +118,7 @@ public class HistoryService(DatabaseContext db) : IHistoryService
 
         db.Histories.Remove(history);
         await db.SaveChangesAsync();
-        
+
         return true;
     }
 }
