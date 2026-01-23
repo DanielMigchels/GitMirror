@@ -1,5 +1,5 @@
 <div *ngIf="totalItems > 0" class="w-full">
-  <div class="overflow-x-auto rounded border border-text/20">
+  <div class="overflow-x-auto rounded">
     <table class="min-w-full divide-y divide-text/20">
       <thead class="bg-background-darkest">
         <tr>
@@ -10,7 +10,7 @@
         </tr>
       </thead>
       <tbody class="bg-background-dark divide-y divide-text/10">
-        <tr *ngFor="let row of rows" class="hover:bg-text/5 transition-colors">
+        <tr *ngFor="let row of rows" class="hover:bg-background-darkest transition-colors">
           <td *ngFor="let cell of row.cells" class="px-6 py-4 text-sm text-text">
             <ng-container *ngTemplateOutlet="cell.template"></ng-container>
           </td>
@@ -25,12 +25,12 @@
     </div>
     <div class="flex gap-2">
       <button (click)="onPrevious()" [disabled]="!data.hasPrevious"
-        class="px-4 py-2 text-sm font-medium rounded border border-text/20 transition-colors"
+        class="px-4 py-2 text-sm font-medium rounded transition-colors"
         [ngClass]="{'bg-primary text-white hover:bg-primary/80 cursor-pointer': data.hasPrevious,'bg-text/5 text-text/40 cursor-not-allowed': !data.hasPrevious}">
         Previous
       </button>
       <button (click)="onNext()" [disabled]="!data.hasNext"
-        class="px-4 py-2 text-sm font-medium rounded border border-text/20 transition-colors"
+        class="px-4 py-2 text-sm font-medium rounded transition-colors"
         [ngClass]="{ 'bg-primary text-white hover:bg-primary/80 cursor-pointer': data.hasNext, 'bg-text/5 text-text/40 cursor-not-allowed': !data.hasNext }">
         Next
       </button>
