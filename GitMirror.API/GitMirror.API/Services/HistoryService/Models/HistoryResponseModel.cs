@@ -11,7 +11,7 @@ public class HistoryResponseModel
     public Guid? MirrorId { get; set; }
     public Guid? RepositoryId { get; set; }
     public PlatformIntegrationType? SourceType { get; set; }
-    public string? SoureBaseUrl { get; internal set; }
+    public string? SourceBaseUrl { get; internal set; }
     public PlatformIntegrationType? TargetType { get; internal set; }
     public string? TargetBaseUrl { get; internal set; }
 }

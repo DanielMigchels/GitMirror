@@ -23,7 +23,20 @@
     </div>
   </app-generic-banner>
 
-  
   <app-generic-datagrid [data]="history" (next)="onNext()" (previous)="onPrevious()">
+    <app-generic-datagrid-columns>
+      <app-generic-datagrid-column>Id</app-generic-datagrid-column>
+      <app-generic-datagrid-column>Source</app-generic-datagrid-column>
+      <app-generic-datagrid-column>Target</app-generic-datagrid-column>
+      <app-generic-datagrid-column>State</app-generic-datagrid-column>
+      <app-generic-datagrid-column>Created On</app-generic-datagrid-column>
+    </app-generic-datagrid-columns>
+    <app-generic-datagrid-row *ngFor="let item of history?.data" [item]="item">
+      <app-generic-datagrid-cell>{{ item.id }}</app-generic-datagrid-cell>
+      <app-generic-datagrid-cell>{{ item.sourceBaseUrl }}</app-generic-datagrid-cell>
+      <app-generic-datagrid-cell>{{ item.targetBaseUrl }}</app-generic-datagrid-cell>
+      <app-generic-datagrid-cell>{{ item.state }}</app-generic-datagrid-cell>
+      <app-generic-datagrid-cell>{{ item.createdOnUtc | date:'short' }}</app-generic-datagrid-cell>
+    </app-generic-datagrid-row>
   </app-generic-datagrid>
 </div>

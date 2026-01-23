@@ -27,7 +27,7 @@ public class HistoryService(DatabaseContext db) : IHistoryService
                 MirrorId = h.MirrorId,
                 RepositoryId = h.RepositoryId,
                 SourceType = h.MirrorId != null && h.Mirror != null && h.Mirror.SourcePlatform != null ? (PlatformIntegrationType?)h.Mirror.SourcePlatform.Type : null,
-                SoureBaseUrl = h.MirrorId != null && h.Mirror != null && h.Mirror.SourcePlatform != null ? h.Mirror.SourcePlatform.BaseUrl : (h.Repository != null ? h.Repository.SourceCloneUrl : null),
+                SourceBaseUrl = h.MirrorId != null && h.Mirror != null && h.Mirror.SourcePlatform != null ? h.Mirror.SourcePlatform.BaseUrl : (h.Repository != null ? h.Repository.SourceCloneUrl : null),
                 TargetType = h.MirrorId != null && h.Mirror != null && h.Mirror.TargetPlatform != null ? (PlatformIntegrationType?)h.Mirror.TargetPlatform.Type : null,
                 TargetBaseUrl = h.MirrorId != null && h.Mirror != null && h.Mirror.TargetPlatform != null ? h.Mirror.TargetPlatform.BaseUrl : (h.Repository != null ? h.Repository.TargetCloneUrl : null),
             })
