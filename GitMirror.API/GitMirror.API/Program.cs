@@ -25,6 +25,8 @@ using GitMirror.API.Data;
 using Microsoft.EntityFrameworkCore;
 using GitMirror.API.Services.RepositoryMirrorService;
 using Hangfire.Dashboard.BasicAuthorization;
+using GitMirror.API.Services.OverviewService;
+using GitMirror.API.Services.SettingService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -75,6 +77,8 @@ builder.Services.AddTransient<IHistoryService, HistoryService>();
 builder.Services.AddTransient<IMirrorService, MirrorService>();
 builder.Services.AddTransient<IRepositoryService, RepositoryService>();
 builder.Services.AddTransient<IPlatformService, PlatformService>();
+builder.Services.AddTransient<IOverviewService, OverviewService>();
+builder.Services.AddTransient<ISettingService, SettingService>();
 
 builder.Services.AddTransient<IPlatformMirrorService, PlatformMirrorService>();
 builder.Services.AddTransient<IPlatformIntegrationServiceFactory, PlatformIntegrationServiceFactory>();
@@ -121,8 +125,8 @@ app.UseEndpoints(endpoints =>
 
 app.UseHangfireDashboard("/hangfire", new DashboardOptions
 {
-    Authorization = new[]
-    {
+    Authorization = 
+    [
         new BasicAuthAuthorizationFilter(new BasicAuthAuthorizationFilterOptions
         {
             RequireSsl = false,
@@ -137,7 +141,7 @@ app.UseHangfireDashboard("/hangfire", new DashboardOptions
                 }
             ]
         })
-    }
+    ]
 });
 
 app.UseSpa(spa =>

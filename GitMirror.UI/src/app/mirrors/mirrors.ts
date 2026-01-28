@@ -46,7 +46,7 @@ export class Mirrors implements OnInit {
   }
 
   fetchData() {
-    this.platformService.get(this.pageSize, 0).subscribe({
+    this.platformService.get(2, 0).subscribe({
       next: (x: PaginatedList<PlatformResponse>) => this.platforms = x
     });
 

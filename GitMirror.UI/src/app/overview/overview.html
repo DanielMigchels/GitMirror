@@ -5,7 +5,7 @@
     <div class="mt-3 border-b border-b-text/20"></div>
   </div>
   
-  <app-generic-banner *ngIf="mirrors?.data?.length === 0 && repositories?.data?.length === 0" title="Welcome to GitMirror.">
+  <app-generic-banner *ngIf="overview?.mirrorCount === 0 && overview?.repositoryCount === 0" title="Welcome to GitMirror.">
     <p>GitMirror helps you synchronize repositories across different Git platforms. You can work in two ways:</p>
 
     <div class="bg-card/50 rounded p-4 space-y-3">

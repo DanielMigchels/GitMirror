@@ -8,6 +8,8 @@ public class RepositoryMirrorService(ILogger<RepositoryMirrorService> logger, Da
 {
     public async Task Execute()
     {
+        logger.LogInformation("Starting repository mirroring process.");
+
         var repositories = await db.Repositories.AsNoTracking().Select(x => new 
         { 
             x.Id,

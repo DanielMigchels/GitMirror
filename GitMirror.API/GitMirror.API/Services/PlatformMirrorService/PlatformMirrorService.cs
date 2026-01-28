@@ -35,7 +35,13 @@ public class PlatformMirrorService(ILogger<PlatformMirrorService> logger, Databa
 
     public async Task MirrorPlatform(Mirror mirror)
     {
-        logger.LogInformation("Repository mirror execution started for platforms {sourcePlatform} and {targetPlatform}.", mirror.SourcePlatform.BaseUrl, mirror.TargetPlatform.BaseUrl);
+        logger.LogInformation("Repository mirror execution started for platforms {sourcePlatform} and {targetPlatform}.", mirror.SourcePlatform?.BaseUrl, mirror.TargetPlatform?.BaseUrl);
+
+        if (mirror.SourcePlatform is null || mirror.TargetPlatform is null)
+        {
+            logger.LogWarning("Skipping mirror {MirrorId} due to missing platform information.", mirror.Id);
+            return;
+        }
 
         var sourcePlatformIntegration = gitPlatformServiceFactory.Create(mirror.SourcePlatform);
         var targetPlatformIntegration = gitPlatformServiceFactory.Create(mirror.TargetPlatform);

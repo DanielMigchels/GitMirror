@@ -1,9 +1,8 @@
-﻿using GitMirror.API.Data;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace GitMirror.API.Services.GitMirrorService;
 
-public class GitMirrorService(DatabaseContext db) : IGitMirrorService
+public class GitMirrorService : IGitMirrorService
 {
     public async Task MirrorAsync(string sourceCloneUrl, string sourceUsername, string sourcePassword, string targetCloneUrl, string targetUsername, string targetPassword, CancellationToken cancellationToken = default)
     {
@@ -29,7 +28,7 @@ public class GitMirrorService(DatabaseContext db) : IGitMirrorService
         }
     }
 
-    private void RemoveReadOnlyAttributes(string directory)
+    private static void RemoveReadOnlyAttributes(string directory)
     {
         var directoryInfo = new DirectoryInfo(directory);
 
@@ -44,7 +43,7 @@ public class GitMirrorService(DatabaseContext db) : IGitMirrorService
         }
     }
 
-    private string InjectCredentials(string url, string username, string password)
+    private static string InjectCredentials(string url, string username, string password)
     {
         if (Uri.TryCreate(url, UriKind.Absolute, out var uri))
         {
@@ -58,7 +57,7 @@ public class GitMirrorService(DatabaseContext db) : IGitMirrorService
         throw new InvalidOperationException("Invalid URL");
     }
 
-    private async Task RunGitAsync(string arguments, string workingDirectory, CancellationToken ct)
+    private async static Task RunGitAsync(string arguments, string workingDirectory, CancellationToken ct)
     {
         var process = new Process
         {
