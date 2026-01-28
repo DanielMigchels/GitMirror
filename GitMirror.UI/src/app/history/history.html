@@ -29,7 +29,6 @@
 
   <app-generic-datagrid [data]="history" (next)="onNext()" (previous)="onPrevious()">
     <app-generic-datagrid-columns>
-      <app-generic-datagrid-column>Id</app-generic-datagrid-column>
       <app-generic-datagrid-column>Link</app-generic-datagrid-column>
       <app-generic-datagrid-column>Source</app-generic-datagrid-column>
       <app-generic-datagrid-column>Target</app-generic-datagrid-column>
@@ -37,19 +36,18 @@
       <app-generic-datagrid-column>Created On</app-generic-datagrid-column>
     </app-generic-datagrid-columns>
     <app-generic-datagrid-row *ngFor="let item of history?.data" [item]="item">
-      <app-generic-datagrid-cell>{{ item.id }}</app-generic-datagrid-cell>
       <app-generic-datagrid-cell>
-        <div *ngIf="item.mirrorId">
+        <a *ngIf="item.mirrorId" href="mirrors/{{item.mirrorId}}">
           Mirror
-        </div>
-        <div *ngIf="item.repositoryId">
+        </a>
+        <a *ngIf="item.repositoryId" href="repositories/{{item.repositoryId}}">
           Repository
-        </div>
+        </a>
       </app-generic-datagrid-cell>
       <app-generic-datagrid-cell>{{ item.sourceBaseUrl }}</app-generic-datagrid-cell>
       <app-generic-datagrid-cell>{{ item.targetBaseUrl }}</app-generic-datagrid-cell>
       <app-generic-datagrid-cell>
-        <div class="flex items-center gap-2" *ngIf="item.state === HistoryState.Queued">
+        <div class="flex items-center gap-2 text-text/70" *ngIf="item.state === HistoryState.Queued">
           <ng-icon name="heroClock" class="text-xl" />
           <span>Queued</span>
         </div>
@@ -57,11 +55,11 @@
           <ng-icon name="heroArrowPath" class="text-xl" />
           <span>In Progress</span>
         </div>
-        <div class="flex items-center gap-2" *ngIf="item.state === HistoryState.Successful">
-          <ng-icon name="heroCheckCircle" class="text-xl text-" />
+        <div class="flex items-center gap-2 text-success" *ngIf="item.state === HistoryState.Successful">
+          <ng-icon name="heroCheckCircle" class="text-xl" />
           <span>Successful</span>
         </div>
-        <div class="flex items-center gap-2" *ngIf="item.state === HistoryState.Failed">
+        <div class="flex items-center gap-2 text-error" *ngIf="item.state === HistoryState.Failed">
           <ng-icon name="heroXCircle" class="text-xl" />
           <span>Failed</span>
         </div>

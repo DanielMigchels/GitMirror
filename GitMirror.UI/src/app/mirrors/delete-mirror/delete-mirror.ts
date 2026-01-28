@@ -29,9 +29,9 @@ export class DeleteMirror {
     this.isChecked = false;
   }
 
-  getPlatformUsername(platformId: string): string {
+  getPlatformUrl(platformId: string): string {
     const platform = this.platforms.find(p => p.id === platformId);
-    return platform ? platform.username : 'Unknown';
+    return platform ? platform.baseUrl : 'Unknown';
   }
 
   deleteMirror() {

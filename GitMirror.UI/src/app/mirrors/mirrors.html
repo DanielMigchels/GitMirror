@@ -29,7 +29,7 @@
             </div>
             <div class="flex flex-col">
               <div class="font-semibold text-sm sm:text-base">{{ getPlatform(mirror.sourcePlatformId) ? getPlatformLabel(getPlatform(mirror.sourcePlatformId)!.type) : 'Unknown' }}</div>
-              <div class="text-xs sm:text-sm text-text/60">@{{ getPlatform(mirror.sourcePlatformId)?.username || 'Unknown' }}</div>
+              <div class="text-xs sm:text-sm text-text/60">{{ getPlatform(mirror.sourcePlatformId)?.baseUrl || 'Unknown' }}</div>
             </div>
           </div>
           <div class="flex items-center gap-3 px-2 sm:px-4 rotate-90 sm:rotate-0">
@@ -41,7 +41,7 @@
             </div>
             <div class="flex flex-col">
               <div class="font-semibold text-sm sm:text-base">{{ getPlatform(mirror.targetPlatformId) ? getPlatformLabel(getPlatform(mirror.targetPlatformId)!.type) : 'Unknown' }}</div>
-              <div class="text-xs sm:text-sm text-text/60">@{{ getPlatform(mirror.targetPlatformId)?.username || 'Unknown' }}</div>
+              <div class="text-xs sm:text-sm text-text/60">{{ getPlatform(mirror.targetPlatformId)?.baseUrl || 'Unknown' }}</div>
             </div>
           </div>
         </div>

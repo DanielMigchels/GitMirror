@@ -6,4 +6,76 @@
     <div class="mt-3 border-b border-b-text/20"></div>
   </div>
 
+  <div class="grid grid-cols-1 gap-4" *ngIf="repositories && repositories.data.length > 0">
+    <div *ngFor="let repository of repositories.data"
+      class="bg-background-dark shadow rounded overflow-hidden hover:bg-background-darker transition-colors ">
+      <div class="flex gap-4 flex-col lg:flex-row lg:justify-between lg:items-center">
+        <div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 flex-1">
+          <div class="flex items-center gap-3 sm:gap-4 p-4 sm:p-6">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-background-darker flex justify-center items-center">
+              <ng-icon name="heroCodeBracket" class="text-lg sm:text-xl"></ng-icon>
+            </div>
+            <div class="flex flex-col">
+              <div class="font-semibold text-sm sm:text-base">{{repository.sourceCloneUrl}}</div>
+              <div class="text-xs sm:text-sm text-text/60" *ngIf="repository.sourceUsername">
+                @{{repository.sourceUsername}}</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 px-2 sm:px-4 rotate-90 sm:rotate-0">
+            <ng-icon name="heroChevronRight" class="text-xl sm:text-2xl text-text/30"></ng-icon>
+          </div>
+          <div class="flex items-center gap-3 sm:gap-4">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-background-darker flex justify-center items-center">
+              <ng-icon name="heroCodeBracket" class="text-lg sm:text-xl"></ng-icon>
+            </div>
+            <div class="flex flex-col">
+              <div class="font-semibold text-sm sm:text-base">{{repository.targetCloneUrl}}</div>
+              <div class="text-xs sm:text-sm text-text/60" *ngIf="repository.targetUsername">
+                @{{repository.targetUsername}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-row sm:flex-col items-stretch justify-stretch w-full sm:w-auto">
+          <button (click)="editRepository($event, repository)"
+            class="px-4 py-3 sm:py-2 hover:bg-background-darkest transition text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer flex-1 sm:flex-auto">
+            <ng-icon name="heroPencil" class="text-sm sm:text-base"></ng-icon>
+            Edit
+          </button>
+          <button (click)="deleteRepository($event, repository)"
+            class="px-4 py-3 sm:py-2 hover:bg-background-darkest transition text-xs sm:text-sm text-error flex items-center justify-center gap-2 cursor-pointer flex-1 sm:flex-auto">
+            <ng-icon name="heroTrash" class="text-sm sm:text-base"></ng-icon>
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button (click)="addRepository($event)"
+    class="w-full bg-background-dark hover:bg-background-darker shadow rounded px-6 py-4 cursor-pointer transition-colors flex items-center justify-center gap-3">
+    <div
+      class="w-8 h-8 bg-background-darker text-text/50 flex justify-center items-center rounded-full border border-text/20">
+      <ng-icon name="heroPlus" class="text-xl"></ng-icon>
+    </div>
+    <span class="text-sm text-text/60">Add Repository</span>
+  </button>
+
+  <div *ngIf="repositories">
+    <div class="flex justify-end gap-1">
+      <button class="bg-background-dark hover:bg-background-darkest px-3 py-2 rounded cursor-pointer"
+        *ngIf="repositories.hasPrevious" (click)="previousPage()">
+        Back
+      </button>
+      <button class="bg-background-dark hover:bg-background-darkest px-3 py-2 rounded cursor-pointer"
+        *ngIf="repositories.hasNext" (click)="nextPage()">
+        Next
+      </button>
+    </div>
+  </div>
 </div>
+
+<app-create-repository #addrepositoryDrawer (drawerClosed)="fetchData()"></app-create-repository>
+<app-edit-repository #editrepositoryDrawer [repository]="selectedRepository"
+  (drawerClosed)="fetchData()"></app-edit-repository>
+<app-delete-repository #deleterepositoryDrawer [repository]="selectedRepository"
+  (drawerClosed)="fetchData()"></app-delete-repository>

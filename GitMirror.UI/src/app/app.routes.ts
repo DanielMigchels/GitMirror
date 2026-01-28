@@ -13,7 +13,9 @@ export const routes: Routes = [{
   children: [
     { path: '', component: Overview },
     { path: 'repositories', component: Repositories },
+    { path: 'repositories/:id', component: Repositories },
     { path: 'mirrors', component: Mirrors },
+    { path: 'mirrors/:id', component: Mirrors },
     { path: 'platforms', component: Platforms },
     { path: 'history', component: History },
     { path: 'settings', component: Settings },

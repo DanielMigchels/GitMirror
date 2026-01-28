@@ -1,0 +1,63 @@
+<app-generic-off-canvas-drawer #drawer title="Edit Repository">
+  <form [formGroup]="formGroup" class="flex flex-col gap-4">
+    
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium">Source Clone URL</label>
+      <input formControlName="sourceCloneUrl" type="text" class=" bg-background-darkest w-full px-3 py-2 rounded placeholder:text-text/20" placeholder="Enter source URL">
+      <div *ngIf="formGroup.get('sourceCloneUrl')?.invalid && formGroup.get('sourceCloneUrl')?.touched" class="text-error text-sm">
+        <span *ngIf="formGroup.get('sourceCloneUrl')?.errors?.['required']">Enter a source URL.</span>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium">Source Username</label>
+      <input formControlName="sourceUsername" type="text" class=" bg-background-darkest w-full px-3 py-2 rounded placeholder:text-text/20" placeholder="Enter source username">
+      <div *ngIf="formGroup.get('sourceUsername')?.invalid && formGroup.get('sourceUsername')?.touched" class="text-error text-sm">
+        <span *ngIf="formGroup.get('sourceUsername')?.errors?.['required']">Enter a source username .</span>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium">Source Password</label>
+      <input formControlName="sourcePassword" type="password" class=" bg-background-darkest w-full px-3 py-2 rounded placeholder:text-text/20" placeholder="Enter source password">
+      <div *ngIf="formGroup.get('sourcePassword')?.invalid && formGroup.get('sourcePassword')?.touched" class="text-error text-sm">
+        <span *ngIf="formGroup.get('sourcePassword')?.errors?.['required']">Enter a source password .</span>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium">Target Clone URL</label>
+      <input formControlName="targetCloneUrl" type="text" class=" bg-background-darkest w-full px-3 py-2 rounded placeholder:text-text/20" placeholder="Enter target URL">
+      <div *ngIf="formGroup.get('targetCloneUrl')?.invalid && formGroup.get('targetCloneUrl')?.touched" class="text-error text-sm">
+        <span *ngIf="formGroup.get('targetCloneUrl')?.errors?.['required']">Enter a target URL.</span>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium">Target Username</label>
+      <input formControlName="targetUsername" type="text" class=" bg-background-darkest w-full px-3 py-2 rounded placeholder:text-text/20" placeholder="Enter target username">
+      <div *ngIf="formGroup.get('targetUsername')?.invalid && formGroup.get('targetUsername')?.touched" class="text-error text-sm">
+        <span *ngIf="formGroup.get('targetUsername')?.errors?.['required']">Enter a target username .</span>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium">Target Password</label>
+      <input formControlName="targetPassword" type="password" class=" bg-background-darkest w-full px-3 py-2 rounded placeholder:text-text/20" placeholder="Enter target password">
+      <div *ngIf="formGroup.get('targetPassword')?.invalid && formGroup.get('targetPassword')?.touched" class="text-error text-sm">
+        <span *ngIf="formGroup.get('targetPassword')?.errors?.['required']">Enter a target password .</span>
+      </div>
+    </div>
+
+    <div class="text-xs text-text/60 bg-background-darkest p-3 rounded">
+      <p>Update the repository synchronization configuration.</p>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-4">
+      <button type="button" *ngIf="!isSubmitting" (click)="updateRepository()" class="shadow rounded py-2 px-4 bg-information hover:bg-information/90 cursor-pointer">
+        Update Repository
+      </button>
+      <app-loader *ngIf="isSubmitting"></app-loader>
+    </div>
+  </form>
+</app-generic-off-canvas-drawer>

@@ -1,7 +1,7 @@
 <app-generic-off-canvas-drawer #drawer title="Delete Mirror">
   <div class="flex flex-col gap-4">
     <div>
-      Are you sure you want to delete the mirror from <span class="font-bold">{{ getPlatformUsername(mirror?.sourcePlatformId || '') }}</span> to <span class="font-bold">{{ getPlatformUsername(mirror?.targetPlatformId || '') }}</span>?
+      Are you sure you want to delete the mirror from <span class="font-bold">{{ getPlatformUrl(mirror?.sourcePlatformId || '') }}</span> to <span class="font-bold">{{ getPlatformUrl(mirror?.targetPlatformId || '') }}</span>?
     </div>
     <div class="font-bold text-error">
       This cannot be undone.

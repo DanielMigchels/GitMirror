@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Route, RouterLink } from '@angular/router';
 import { NgIf, NgFor } from '@angular/common';
 import { GenericBanner } from '../../components/generic-banner/generic-banner';
 import { PlatformService } from '../../services/platform/platform.service';
@@ -21,8 +21,10 @@ import { DeleteMirror } from './delete-mirror/delete-mirror';
 })
 export class Mirrors implements OnInit {
   platforms: PaginatedList<PlatformResponse> | undefined;
+
   mirrors: PaginatedList<MirrorResponse> | undefined;
   selectedMirror: MirrorResponse | undefined;
+  routeMirrorId: string | undefined;
 
   pageSize = 2147483647;
   page = 0;
@@ -32,9 +34,12 @@ export class Mirrors implements OnInit {
   @ViewChild(DeleteMirror) deleteMirrorDrawer!: DeleteMirror;
 
   constructor(
+    private route: ActivatedRoute,
     private platformService: PlatformService,
     private mirrorService: MirrorService
-  ) { }
+  ) {
+    this.routeMirrorId = this.route.snapshot.paramMap.get('id')!;
+  }
 
   ngOnInit(): void {
     this.fetchData();
@@ -47,7 +52,16 @@ export class Mirrors implements OnInit {
 
     this.mirrors = undefined;
     this.mirrorService.get(this.pageSize, this.page).subscribe({
-      next: (x: PaginatedList<MirrorResponse>) => this.mirrors = x
+      next: (x: PaginatedList<MirrorResponse>) => {
+        this.mirrors = x
+
+        if (this.routeMirrorId == undefined) {
+          return;
+        }
+
+        const selectedMirror = this.mirrors.data.find(m => m.id === this.routeMirrorId);
+          this.editMirror(new Event('click'), selectedMirror!);
+      }
     });
   }
 
