@@ -5,11 +5,11 @@ import { RepositoryResponse } from '../../../services/repository/models/reposito
 import { NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Loader } from '../../../components/loader/loader';
-import { NgIcon } from '@ng-icons/core';
+import { NgIcon, NgIconComponent } from '@ng-icons/core';
 
 @Component({
   selector: 'app-delete-repository',
-  imports: [GenericOffCanvasDrawer, NgIf, FormsModule, Loader, NgIcon],
+  imports: [GenericOffCanvasDrawer, NgIf, FormsModule, Loader, NgIcon, NgIconComponent],
   templateUrl: './delete-repository.html',
   styleUrl: './delete-repository.css',
 })
