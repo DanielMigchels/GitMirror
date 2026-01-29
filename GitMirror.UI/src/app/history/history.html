@@ -44,8 +44,8 @@
           Repository
         </a>
       </app-generic-datagrid-cell>
-      <app-generic-datagrid-cell>{{ item.sourceBaseUrl }}</app-generic-datagrid-cell>
-      <app-generic-datagrid-cell>{{ item.targetBaseUrl }}</app-generic-datagrid-cell>
+      <app-generic-datagrid-cell>{{ item.sourceUrl }}</app-generic-datagrid-cell>
+      <app-generic-datagrid-cell>{{ item.targetUrl }}</app-generic-datagrid-cell>
       <app-generic-datagrid-cell>
         <div class="flex items-center gap-2 text-text/70" *ngIf="item.state === HistoryState.Queued">
           <ng-icon name="heroClock" class="text-xl" />

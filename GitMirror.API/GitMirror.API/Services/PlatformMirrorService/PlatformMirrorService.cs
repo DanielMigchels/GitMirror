@@ -29,8 +29,27 @@ public class PlatformMirrorService(ILogger<PlatformMirrorService> logger, Databa
                 continue;
             }
 
-            await MirrorPlatform(mirror);
+            try
+            {
+                await MirrorPlatform(mirror);
+            }
+            catch(Exception ex)
+            {
+                logger.LogError(ex, "Could not mirror platform.");
+
+                var history = new Data.Models.History
+                {
+                    Id = Guid.NewGuid(),
+                    MirrorId = mirror.Id,
+                    CreatedOnUtc = DateTimeOffset.UtcNow,
+                    State = Data.Enums.HistoryState.Failed,
+                    SourceUrl = mirror.SourcePlatform.BaseUrl,
+                    TargetUrl = mirror.TargetPlatform.BaseUrl,
+                };
+                db.Histories.Add(history);
+            }
         }
+        await db.SaveChangesAsync();
     }
 
     public async Task MirrorPlatform(Mirror mirror)
@@ -71,7 +90,9 @@ public class PlatformMirrorService(ILogger<PlatformMirrorService> logger, Databa
                     Id = Guid.NewGuid(),
                     MirrorId = mirror.Id,
                     CreatedOnUtc = DateTimeOffset.UtcNow,
-                    State = Data.Enums.HistoryState.InProgress
+                    State = Data.Enums.HistoryState.InProgress,
+                    SourceUrl = sourceRepository.CloneUrl,
+                    TargetUrl = targetRepository.CloneUrl,
                 };
 
                 histories.Add(history);

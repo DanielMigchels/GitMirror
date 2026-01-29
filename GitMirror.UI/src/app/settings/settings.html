@@ -1,7 +1,53 @@
 <div class="flex flex-col gap-4">
   <div class="">
     <h2 class="font-bold text-2xl">Settings</h2>
-    <p class="text-text/45 font-light">Configure your GitMirror preferences, manage integrations, and customize synchronization settings to suit your workflow.</p>
+    <p class="text-text/45 font-light">Configure your GitMirror preferences, manage integrations, and customize
+      synchronization settings to suit your workflow.</p>
     <div class="mt-3 border-b border-b-text/20"></div>
+  </div>
+
+  <div class="bg-background-dark shadow rounded py-4 px-6 max-w-96 flex flex-col gap-4 items-start">
+    <h3 class="w-full font-bold text-lg">Manual trigger</h3>
+    <div class="flex gap-4">
+      <button class="shadow rounded py-2 px-4 bg-information hover:bg-information/80 cursor-pointer max-w-fit"
+        (click)="triggerJob('Execute Platform Mirror')">
+        <span>Trigger Platform Mirror</span>
+      </button>
+      <button class="shadow rounded py-2 px-4 bg-information hover:bg-information/80 cursor-pointer max-w-fit"
+        (click)="triggerJob('Execute Repository Mirror')">
+        <span>Trigger Repository Mirror</span>
+      </button>
+    </div>
+  </div>
+
+  <form [formGroup]="formGroup"
+    class="bg-background-dark shadow rounded py-4 px-6 max-w-96 flex flex-col gap-4 items-end">
+    <h3 class="w-full font-bold text-lg">Mirror Intervals</h3>
+    <div class="flex flex-col gap-1 w-full">
+      <label class="text-sm font-medium">Platform Mirror Interval</label>
+      <input formControlName="platformMirrorCron" type="text"
+        class=" bg-background-darkest w-full px-3 py-2 rounded placeholder:text-text/20"
+        placeholder="Enter Platform Mirror Interval">
+    </div>
+    <div class="flex flex-col gap-1 w-full">
+      <label class="text-sm font-medium">Repository Mirror Interval</label>
+      <input formControlName="repositoryMirrorCron" type="text"
+        class=" bg-background-darkest/80 w-full px-3 py-2 rounded placeholder:text-text/20"
+        placeholder="Enter Repository Mirror Interval">
+    </div>
+    <button class="shadow rounded py-2 px-4 bg-information hover:bg-information/80 cursor-pointer max-w-fit"
+      (click)="saveSettings()">
+      <span>Save</span>
+    </button>
+  </form>
+
+  <div>
+    <button class="shadow rounded py-2 px-4 bg-background-dark hover:bg-background-darkest cursor-pointer"
+      (click)="openHangfire()">
+      <div class="flex justify-center items-center gap-3">
+        <ng-icon name="heroLink"></ng-icon>
+        <span>Open Hangfire</span>
+      </div>
+    </button>
   </div>
 </div>

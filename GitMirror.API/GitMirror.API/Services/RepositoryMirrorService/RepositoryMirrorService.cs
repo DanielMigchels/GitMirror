@@ -34,7 +34,9 @@ public class RepositoryMirrorService(ILogger<RepositoryMirrorService> logger, Da
                     RepositoryId = repository.Id,
                     CreatedOnUtc = DateTimeOffset.UtcNow,
                     State = Data.Enums.HistoryState.InProgress,
-                    MirrorId = null
+                    MirrorId = null,
+                    SourceUrl = repository.SourceCloneUrl,
+                    TargetUrl = repository.TargetCloneUrl,
                 };
 
                 db.Histories.Add(history);

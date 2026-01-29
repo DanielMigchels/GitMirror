@@ -6,8 +6,6 @@ export interface HistoryResponse {
   createdOnUtc: string;
   mirrorId?: string;
   repositoryId?: string;
-  sourceType?: number;
-  sourceBaseUrl?: string;
-  targetType?: number;
-  targetBaseUrl?: string;
+  sourceUrl?: string;
+  targetUrl?: string;
 }

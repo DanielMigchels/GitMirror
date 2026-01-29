@@ -87,6 +87,8 @@ builder.Services.AddTransient<ISettingService, SettingService>();
 builder.Services.AddTransient<IPlatformMirrorService, PlatformMirrorService>();
 builder.Services.AddTransient<IPlatformIntegrationServiceFactory, PlatformIntegrationServiceFactory>();
 
+builder.Services.AddTransient<IRepositoryMirrorService, RepositoryMirrorService>();
+
 builder.Services.AddTransient<IPlatformIntegrationService, AzureDevOpsService>();
 builder.Services.AddTransient<IAzureDevOpsApiService, AzureDevOpsApiService>();
 builder.Services.AddHttpClient<IAzureDevOpsGateway, AzureDevOpsGateway>();
@@ -126,10 +128,7 @@ app.UseEndpoints(endpoints =>
 });
 #pragma warning restore ASP0014 // Suggest using top level route registrations
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseHangfireDashboard("/hangfire");
-}
+app.UseHangfireDashboard("/hangfire");
 
 app.UseSpa(spa =>
 {
