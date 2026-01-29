@@ -1,0 +1,40 @@
+/* Chart text styling - white text for dark theme */
+:host ::ng-deep .ngx-charts text {
+  fill: #D3DAD9 !important;
+}
+
+:host ::ng-deep .ngx-charts .legend-label {
+  fill: #D3DAD9 !important;
+}
+
+:host ::ng-deep .ngx-charts .legend-title-text {
+  fill: #D3DAD9 !important;
+}
+
+:host ::ng-deep .ngx-charts .axis text {
+  fill: #D3DAD9 !important;
+}
+
+:host ::ng-deep .ngx-charts .label {
+  fill: #D3DAD9 !important;
+}
+
+:host ::ng-deep .ngx-charts .pie-label {
+  fill: #D3DAD9 !important;
+}
+
+:host ::ng-deep .ngx-charts .legend-label-text {
+  fill: #D3DAD9 !important;
+}
+
+:host ::ng-deep .ngx-charts .tick text {
+  fill: #D3DAD9 !important;
+}
+
+:host ::ng-deep ngx-charts-pie-chart text {
+  fill: #D3DAD9 !important;
+}
+
+:host ::ng-deep ngx-charts-line-chart text {
+  fill: #D3DAD9 !important;
+}
