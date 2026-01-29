@@ -21,6 +21,7 @@ using GitMirror.API.Services.PlatformMirrorService;
 using GitMirror.API.Services.PlatformService;
 using GitMirror.API.Services.RepositoryMirrorService;
 using GitMirror.API.Services.RepositoryService;
+using GitMirror.API.Services.SeedService;
 using GitMirror.API.Services.SettingService;
 using Hangfire;
 using Hangfire.PostgreSql;
@@ -83,6 +84,7 @@ builder.Services.AddTransient<IRepositoryService, RepositoryService>();
 builder.Services.AddTransient<IPlatformService, PlatformService>();
 builder.Services.AddTransient<IOverviewService, OverviewService>();
 builder.Services.AddTransient<ISettingService, SettingService>();
+builder.Services.AddTransient<ISeedService, SeedService>();
 
 builder.Services.AddTransient<IPlatformMirrorService, PlatformMirrorService>();
 builder.Services.AddTransient<IPlatformIntegrationServiceFactory, PlatformIntegrationServiceFactory>();
@@ -157,6 +159,11 @@ if (!HangfireHelper.RecurringJobExists("Execute Platform Mirror"))
 if (!HangfireHelper.RecurringJobExists("Execute Repository Mirror"))
 {
     RecurringJob.AddOrUpdate<IRepositoryMirrorService>("Execute Repository Mirror", x => x.Execute(), Cron.Daily(0), new RecurringJobOptions());
+}
+
+if (!HangfireHelper.RecurringJobExists("Seed fake history"))
+{
+    RecurringJob.AddOrUpdate<ISeedService>("Seed fake history", x => x.SeedFakeHistory(), Cron.Never, new RecurringJobOptions());
 }
 
 app.Run();
