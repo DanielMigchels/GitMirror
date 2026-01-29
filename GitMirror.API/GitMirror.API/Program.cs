@@ -1,32 +1,33 @@
+using GitMirror.API.Data;
+using GitMirror.API.Helpers.Hangfire;
 using GitMirror.API.Services.GitMirrorService;
-using GitMirror.API.Services.PlatformMirrorService;
+using GitMirror.API.Services.HistoryService;
+using GitMirror.API.Services.MirrorService;
+using GitMirror.API.Services.OverviewService;
 using GitMirror.API.Services.PlatformIntegrationsService;
 using GitMirror.API.Services.PlatformIntegrationsService.AzureDevOps;
 using GitMirror.API.Services.PlatformIntegrationsService.AzureDevOps.Api;
 using GitMirror.API.Services.PlatformIntegrationsService.AzureDevOps.Api.Gateway;
-using GitMirror.API.Services.PlatformIntegrationsService.GitLab;
-using GitMirror.API.Services.PlatformIntegrationsService.GitLab.Api;
-using GitMirror.API.Services.PlatformIntegrationsService.GitLab.Api.Gateway;
-using GitMirror.API.Services.PlatformIntegrationsService.GitHub;
-using GitMirror.API.Services.PlatformIntegrationsService.GitHub.Api;
-using GitMirror.API.Services.PlatformIntegrationsService.GitHub.Api.Gateway;
 using GitMirror.API.Services.PlatformIntegrationsService.Bitbucket;
 using GitMirror.API.Services.PlatformIntegrationsService.Bitbucket.Api;
 using GitMirror.API.Services.PlatformIntegrationsService.Bitbucket.Api.Gateway;
-using GitMirror.API.Services.HistoryService;
-using GitMirror.API.Services.MirrorService;
-using GitMirror.API.Services.RepositoryService;
+using GitMirror.API.Services.PlatformIntegrationsService.GitHub;
+using GitMirror.API.Services.PlatformIntegrationsService.GitHub.Api;
+using GitMirror.API.Services.PlatformIntegrationsService.GitHub.Api.Gateway;
+using GitMirror.API.Services.PlatformIntegrationsService.GitLab;
+using GitMirror.API.Services.PlatformIntegrationsService.GitLab.Api;
+using GitMirror.API.Services.PlatformIntegrationsService.GitLab.Api.Gateway;
+using GitMirror.API.Services.PlatformMirrorService;
 using GitMirror.API.Services.PlatformService;
-using Hangfire;
-using Serilog;
-using Microsoft.OpenApi;
-using Serilog.Sinks.Network;
-using GitMirror.API.Data;
-using Microsoft.EntityFrameworkCore;
 using GitMirror.API.Services.RepositoryMirrorService;
-using Hangfire.Dashboard.BasicAuthorization;
-using GitMirror.API.Services.OverviewService;
+using GitMirror.API.Services.RepositoryService;
 using GitMirror.API.Services.SettingService;
+using Hangfire;
+using Hangfire.PostgreSql;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi;
+using Serilog;
+using Serilog.Sinks.Network;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,7 +64,10 @@ builder.Services.AddHangfire(configuration =>
     configuration.UseSerilogLogProvider()
         .UseSimpleAssemblyNameTypeSerializer()
         .UseRecommendedSerializerSettings()
-        .UseInMemoryStorage();
+        .UsePostgreSqlStorage(x =>
+        {
+            x.UseNpgsqlConnection(builder.Configuration.GetConnectionString("Postgres"));
+        });
 });
 
 builder.Services.AddHangfireServer(options =>
@@ -122,27 +126,10 @@ app.UseEndpoints(endpoints =>
 });
 #pragma warning restore ASP0014 // Suggest using top level route registrations
 
-
-app.UseHangfireDashboard("/hangfire", new DashboardOptions
+if (app.Environment.IsDevelopment())
 {
-    Authorization = 
-    [
-        new BasicAuthAuthorizationFilter(new BasicAuthAuthorizationFilterOptions
-        {
-            RequireSsl = false,
-            SslRedirect = false,
-            LoginCaseSensitive = false,
-            Users =
-            [
-                new BasicAuthAuthorizationUser
-                {
-                    Login = builder.Configuration["Hangfire:Username"] ?? "admin",
-                    PasswordClear = builder.Configuration["Hangfire:Password"] ?? "admin"
-                }
-            ]
-        })
-    ]
-});
+    app.UseHangfireDashboard("/hangfire");
+}
 
 app.UseSpa(spa =>
 {
@@ -163,8 +150,14 @@ catch (Exception ex)
     Log.Logger.Information("An error occurred while migrating the database: {Message}", ex.Message);
 }
 
+if (!HangfireHelper.RecurringJobExists("Execute Platform Mirror"))
+{
+    RecurringJob.AddOrUpdate<IPlatformMirrorService>("Execute Platform Mirror", x => x.Execute(), Cron.Daily(2), new RecurringJobOptions());
+}
 
-RecurringJob.AddOrUpdate<IPlatformMirrorService>("Execute Platform Mirror", x => x.Execute(), Cron.Daily(2), new RecurringJobOptions());
-RecurringJob.AddOrUpdate<IRepositoryMirrorService>("Execute Repository Mirror", x => x.Execute(), Cron.Daily(0), new RecurringJobOptions());
+if (!HangfireHelper.RecurringJobExists("Execute Repository Mirror"))
+{
+    RecurringJob.AddOrUpdate<IRepositoryMirrorService>("Execute Repository Mirror", x => x.Execute(), Cron.Daily(0), new RecurringJobOptions());
+}
 
 app.Run();
