@@ -30,7 +30,7 @@ jobs:
 
     - name: Install Angular dependencies
       working-directory: ./GitMirror.UI
-      run: npm ci
+      run: npm install
 
     - name: Test Angular
       working-directory: ./GitMirror.UI
