@@ -46,7 +46,7 @@ Installs the app on your Kubernetes cluster.
 ```bash
 helm install gitmirror .\GitMirror.Helm\ --namespace gitmirror --create-namespace
 ```
-App becomes available on port 32111 and should be reachable through HTTP. (http://localhost:32111)
+App becomes available on port 32112 and should be reachable through HTTP. (http://localhost:32112)
 
 ## Future Improvements
 
