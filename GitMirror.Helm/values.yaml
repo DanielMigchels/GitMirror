@@ -1,6 +1,10 @@
 namespace: gitmirror
 connectionstrings:
-  postgres: "Host=postgres;Port=5432;Database=postgres;Username=postgres;Password=postgres;"
+  postgres: "Host=postgres;Port=5432;Database=postgres;Username=postgres;Password=7f31ff77-9e6b-4981-8e4d-8f93c2f35cfb;"
+postgres:
+  database: "postgres"
+  username: "postgres"
+  password: "7f31ff77-9e6b-4981-8e4d-8f93c2f35cfb"
 elastic:
   tcpsink: "tcp://127.0.0.1:5044"
 hangfire:

@@ -24,6 +24,7 @@ using GitMirror.API.Services.RepositoryService;
 using GitMirror.API.Services.SeedService;
 using GitMirror.API.Services.SettingService;
 using Hangfire;
+using Hangfire.Dashboard.BasicAuthorization;
 using Hangfire.PostgreSql;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
@@ -130,7 +131,26 @@ app.UseEndpoints(endpoints =>
 });
 #pragma warning restore ASP0014 // Suggest using top level route registrations
 
-app.UseHangfireDashboard("/hangfire");
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    Authorization = new[]
+    {
+        new BasicAuthAuthorizationFilter(new BasicAuthAuthorizationFilterOptions
+        {
+            RequireSsl = false,
+            SslRedirect = false,
+            LoginCaseSensitive = false,
+            Users =
+            [
+                new BasicAuthAuthorizationUser
+                {
+                    Login = builder.Configuration["Hangfire:Username"] ?? "admin",
+                    PasswordClear = builder.Configuration["Hangfire:Password"] ?? "admin"
+                }
+            ]
+        })
+    }
+});
 
 app.UseSpa(spa =>
 {

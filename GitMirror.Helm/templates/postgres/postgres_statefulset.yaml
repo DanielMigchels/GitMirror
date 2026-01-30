@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: postgres
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Release.Namespace }}
 spec:
   serviceName: postgres
   replicas: 1
@@ -26,13 +26,8 @@ spec:
                 name: postgres-configmap
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: postgresdata
-  volumeClaimTemplates:
-    - metadata:
-        name: postgresdata
-      spec:
-        accessModes: ["ReadWriteOnce"]
-        storageClassName: manual
-        resources:
-          requests:
-            storage: 2Gi
+              name: postgres-storage
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-postgres-volume-claim
