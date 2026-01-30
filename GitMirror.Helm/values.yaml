@@ -1,10 +1,8 @@
 namespace: gitmirror
-gitplatforms:
-  azuredevops:
-    baseurl: "https://your-organization.visualstudio.com/"
-    username: "username"
-    password: "placeholder"
-  gitlab:
-    baseurl: "https://gitlab.your-organization.com/"
-    username: "username"
-    password: "placeholder"
+connectionstrings:
+  postgres: "Host=postgres;Port=5432;Database=postgres;Username=postgres;Password=postgres;"
+elastic:
+  tcpsink: "tcp://127.0.0.1:5044"
+hangfire:
+  username: "admin"
+  password: "admin"
