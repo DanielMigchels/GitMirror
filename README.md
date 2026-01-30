@@ -26,6 +26,26 @@ The code is proven to work for Azure DevOps -> GitLab. All other integrations ar
 - **GitHub**
 - **Bitbucket**
 
+## How to Run
+
+Instructions on how to run the application.
+
+### Docker Compose
+Compiles source code, builds docker image, and runs it along with its dependencies on your docker instance.
+
+```bash
+docker-compose up
+```
+App becomes available on port 5000 and should be reachable through HTTP. (http://localhost:5000)
+
+### Helm Chart
+Installs the app on your Kubernetes cluster.
+
+```bash
+helm install gitmirror .\GitMirror.Helm\ --namespace gitmirror --create-namespace
+```
+App becomes available on port 32111 and should be reachable through HTTP. (http://localhost:32111)
+
 ## Future Improvements
 
 - **Horizontally Scalable Architecture**: Separate Hangfire job processing from the API to enable horizontal scaling of the API layer. Currently, Hangfire is embedded in the API, which limits scalability.
