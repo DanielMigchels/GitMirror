@@ -19,16 +19,16 @@ export class CreatePlatform {
   @Output() drawerClosed = new EventEmitter();
 
   formGroup = new FormGroup({
-    type: new FormControl<number>(PlatformType.GitHub, [Validators.required]),
+    type: new FormControl<number>(PlatformType.AzureDevOps, [Validators.required]),
     username: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
     baseUrl: new FormControl('', [Validators.required])
   });
 
   platformTypes = [
-    { value: PlatformType.GitHub, label: 'GitHub' },
-    { value: PlatformType.GitLab, label: 'GitLab' },
     { value: PlatformType.AzureDevOps, label: 'Azure DevOps' },
+    { value: PlatformType.GitLab, label: 'GitLab' },
+    { value: PlatformType.GitHub, label: 'GitHub' },
     { value: PlatformType.Bitbucket, label: 'Bitbucket' }
   ];
 

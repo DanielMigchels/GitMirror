@@ -20,16 +20,16 @@ export class EditPlatform {
   @Input() platform: PlatformResponse | undefined;
 
   formGroup = new FormGroup({
-    type: new FormControl<PlatformType>(PlatformType.GitHub, [Validators.required]),
+    type: new FormControl<PlatformType>(PlatformType.AzureDevOps, [Validators.required]),
     username: new FormControl('', [Validators.required]),
     password: new FormControl(''),
     baseUrl: new FormControl('', [Validators.required])
   });
 
   platformTypes = [
-    { value: PlatformType.GitHub, label: 'GitHub' },
-    { value: PlatformType.GitLab, label: 'GitLab' },
     { value: PlatformType.AzureDevOps, label: 'Azure DevOps' },
+    { value: PlatformType.GitLab, label: 'GitLab' },
+    { value: PlatformType.GitHub, label: 'GitHub' },
     { value: PlatformType.Bitbucket, label: 'Bitbucket' }
   ];
 
@@ -58,7 +58,7 @@ export class EditPlatform {
     this.platformService.update(this.platform.id, this.formGroup.value as PlatformRequest).subscribe({
       next: () => {
         this.drawerClosed.emit();
-        this.formGroup.reset({ type: PlatformType.GitHub });
+        this.formGroup.reset({ type: PlatformType.AzureDevOps });
         this.drawer.closeDrawer();
         this.isSubmitting = false;
       },
