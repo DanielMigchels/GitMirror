@@ -1,5 +1,7 @@
 # GitMirror
 
+[![Build](https://github.com/DanielMigchels/GitMirror/actions/workflows/dotnet-build.yml/badge.svg)](https://github.com/DanielMigchels/GitMirror/actions/workflows/build.yml) [![Docker Hub](https://img.shields.io/docker/v/danielmigchels/gitmirror?label=docker%20hub&logo=docker)](https://hub.docker.com/r/danielmigchels/gitmirror)
+
 A repository mirroring service that automatically synchronizes Git repositories across multiple Git platforms.
 
 <img style="width: 600px;" src="GitMirror.Docs/demo.gif">
