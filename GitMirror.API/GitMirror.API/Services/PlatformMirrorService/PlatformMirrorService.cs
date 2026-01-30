@@ -33,7 +33,7 @@ public class PlatformMirrorService(ILogger<PlatformMirrorService> logger, Databa
             {
                 await MirrorPlatform(mirror);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.LogError(ex, "Could not mirror platform.");
 
@@ -71,54 +71,43 @@ public class PlatformMirrorService(ILogger<PlatformMirrorService> logger, Databa
         var targetRepositories = await targetPlatformIntegration.GetRepositories();
         logger.LogInformation("Fetched {TargetCount} repositories from target.", targetRepositories.Count);
 
-        var originalAutoDetect = db.ChangeTracker.AutoDetectChangesEnabled;
-        db.ChangeTracker.AutoDetectChangesEnabled = false;
-
-        var histories = new List<Data.Models.History>();
-
-        try
+        foreach (var sourceRepository in sourceRepositories)
         {
-            foreach (var sourceRepository in sourceRepositories)
+            logger.LogInformation("Processing repository {RepositoryName}.", sourceRepository.Name);
+
+            var targetRepository = targetRepositories.FirstOrDefault(r => r.Name.Equals(sourceRepository.Name, StringComparison.OrdinalIgnoreCase))
+                ?? await targetPlatformIntegration.CreateRepository(sourceRepository);
+
+            var history = new Data.Models.History
             {
-                logger.LogInformation("Processing repository {RepositoryName}.", sourceRepository.Name);
+                Id = Guid.NewGuid(),
+                MirrorId = mirror.Id,
+                CreatedOnUtc = DateTimeOffset.UtcNow,
+                State = Data.Enums.HistoryState.InProgress,
+                SourceUrl = sourceRepository.CloneUrl,
+                TargetUrl = targetRepository.CloneUrl,
+            };
 
-                var targetRepository = targetRepositories.FirstOrDefault(r => r.Name.Equals(sourceRepository.Name, StringComparison.OrdinalIgnoreCase)) 
-                    ?? await targetPlatformIntegration.CreateRepository(sourceRepository);
+            db.Histories.Add(history);
+            await db.SaveChangesAsync();
 
-                var history = new Data.Models.History
-                {
-                    Id = Guid.NewGuid(),
-                    MirrorId = mirror.Id,
-                    CreatedOnUtc = DateTimeOffset.UtcNow,
-                    State = Data.Enums.HistoryState.InProgress,
-                    SourceUrl = sourceRepository.CloneUrl,
-                    TargetUrl = targetRepository.CloneUrl,
-                };
-
-                histories.Add(history);
-                db.Histories.Add(history);
-
-                try
-                {
-                    await gitService.MirrorAsync(sourceRepository.CloneUrl, mirror.SourcePlatform.Username, mirror.SourcePlatform.Password, targetRepository.CloneUrl, mirror.TargetPlatform.Username, mirror.TargetPlatform.Password);
-                    history.State = Data.Enums.HistoryState.Successful;
-                }
-                catch
-                {
-                    history.State = Data.Enums.HistoryState.Failed;
-                }
-
-                logger.LogInformation("Completed mirroring {RepositoryName}.", sourceRepository.Name);
-
-                await Task.Delay(1500);
+            try
+            {
+                await gitService.MirrorAsync(sourceRepository.CloneUrl, mirror.SourcePlatform.Username, mirror.SourcePlatform.Password, targetRepository.CloneUrl, mirror.TargetPlatform.Username, mirror.TargetPlatform.Password);
+                history.State = Data.Enums.HistoryState.Successful;
+            }
+            catch
+            {
+                history.State = Data.Enums.HistoryState.Failed;
             }
 
+            logger.LogInformation("Completed mirroring {RepositoryName}.", sourceRepository.Name);
+
             await db.SaveChangesAsync();
+
+            await Task.Delay(1500);
         }
-        finally
-        {
-            db.ChangeTracker.AutoDetectChangesEnabled = originalAutoDetect;
-        }
+
 
         logger.LogInformation("Repository mirror execution completed.");
     }
