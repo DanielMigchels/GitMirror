@@ -7,6 +7,10 @@
     <div class="mt-3 border-b border-b-text/20"></div>
   </div>
 
+  <app-generic-banner *ngIf="overview?.isDemoMode" title="GitMirror is running in demo mode">
+    <p>This instance of GitMirror shows sample data and is not connected to any real Git platforms. Create, edit and delete actions are disabled.</p>
+  </app-generic-banner>
+
   <app-generic-banner *ngIf="overview?.mirrorCount === 0 && overview?.repositoryCount === 0"
     title="Welcome to GitMirror.">
     <p>GitMirror helps you synchronize repositories across different Git platforms. You can work in two ways:</p>

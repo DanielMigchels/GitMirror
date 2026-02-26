@@ -12,4 +12,5 @@ export interface OverviewResponse {
   failedCount: number;
   dailyActivity: DailyActivity[];
   recentHistory: RecentHistory[];
+  isDemoMode: boolean;
 }

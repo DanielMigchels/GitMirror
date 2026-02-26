@@ -55,7 +55,8 @@ public class OverviewService(DatabaseContext db) : IOverviewService
             SuccessfulCount = successfulCount,
             FailedCount = failedCount,
             DailyActivity = dailyActivity,
-            RecentHistory = recentHistoryList
+            RecentHistory = recentHistoryList,
+            IsDemoMode = false,
         };
 
         return response;

@@ -12,4 +12,5 @@ public class OverviewResponseModel
     public int FailedCount { get; set; }
     public List<DailyActivityModel> DailyActivity { get; set; } = new();
     public List<RecentHistoryModel> RecentHistory { get; set; } = new();
+    public bool IsDemoMode { get; set; }
 }
