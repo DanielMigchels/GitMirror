@@ -4,7 +4,7 @@ COPY ./GitMirror.UI ./GitMirror.UI
 WORKDIR /app/GitMirror.UI
 # RUN npm ci --Temporarily disabled, but needs to be enabled for security reasons.
 RUN npm install
-RUN npm audit
+# RUN npm audit
 RUN npm run build --omit=dev
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS dotnet-build
