@@ -2,6 +2,8 @@
 
 [![Build](https://github.com/DanielMigchels/GitMirror/actions/workflows/dotnet-build.yml/badge.svg)](https://github.com/DanielMigchels/GitMirror/actions/workflows/dotnet-build.yml) [![Docker Hub](https://img.shields.io/docker/v/danielmigchels/gitmirror?label=docker%20hub&logo=docker)](https://hub.docker.com/r/danielmigchels/gitmirror)
 
+Live demo: https://gitmirror-demo.danielmigchels.nl/
+
 A repository mirroring service that automatically synchronizes Git repositories across multiple Git platforms.
 
 <img style="width: 600px;" src="GitMirror.Docs/demo.gif">
@@ -52,4 +54,5 @@ App becomes available on port 32112 and should be reachable through HTTP. (http:
 
 - **Horizontally Scalable Architecture**: Separate Hangfire job processing from the API to enable horizontal scaling of the API layer. Currently, Hangfire is embedded in the API, which limits scalability.
 - **Enhanced Platform Support**: Complete and stabilize GitHub and Bitbucket integrations
+
 - **Webhook Support**: Enable real-time syncing triggered by repository changes
