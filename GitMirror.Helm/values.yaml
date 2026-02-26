@@ -10,3 +10,5 @@ elastic:
 hangfire:
   username: "admin"
   password: "admin"
+demoMode:
+  enabled: "false"

@@ -8,7 +8,7 @@
 
   <div class="grid grid-cols-1 gap-4" *ngIf="repositories && repositories.data.length > 0">
     <div *ngFor="let repository of repositories.data"
-      class="bg-background-dark shadow rounded overflow-hidden hover:bg-background-darker transition-colors ">
+      class="bg-background-dark shadow rounded overflow-hidden hover:bg-background-darker transition-colors">
       <div class="flex gap-4 flex-col lg:flex-row lg:justify-between lg:items-center">
         <div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 flex-1">
           <div class="flex items-center gap-3 sm:gap-4 p-4 sm:p-6">
@@ -16,7 +16,7 @@
               <ng-icon name="heroCodeBracket" class="text-lg sm:text-xl"></ng-icon>
             </div>
             <div class="flex flex-col">
-              <div class="font-semibold text-sm sm:text-base">{{repository.sourceCloneUrl}}</div>
+              <div class="font-semibold text-sm sm:text-base text-ellipsis truncate max-w-52">{{repository.sourceCloneUrl}}</div>
               <div class="text-xs sm:text-sm text-text/60" *ngIf="repository.sourceUsername">
                 @{{repository.sourceUsername}}</div>
             </div>
@@ -29,7 +29,7 @@
               <ng-icon name="heroCodeBracket" class="text-lg sm:text-xl"></ng-icon>
             </div>
             <div class="flex flex-col">
-              <div class="font-semibold text-sm sm:text-base">{{repository.targetCloneUrl}}</div>
+              <div class="font-semibold text-sm sm:text-base text-ellipsis truncate max-w-52">{{repository.targetCloneUrl}}</div>
               <div class="text-xs sm:text-sm text-text/60" *ngIf="repository.targetUsername">
                 @{{repository.targetUsername}}</div>
             </div>
